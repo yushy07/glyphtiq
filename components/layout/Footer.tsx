@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "./Logo";
 
 const PAGE_LINKS = [
   { href: "/", label: "Generator" },
@@ -22,19 +22,7 @@ export function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-3">
             <Link href="/" className="flex items-center gap-2.5">
-              <span className="grid size-8 shrink-0 place-items-center overflow-hidden rounded-xl bg-surface ring-1 ring-border">
-                <Image
-                  src="/glyphy-mark.svg"
-                  alt=""
-                  width={32}
-                  height={32}
-                  unoptimized
-                  className="size-8 object-cover"
-                />
-              </span>
-              <span className="text-lg font-extrabold tracking-tight">
-                <span className="gradient-text">Glyphy</span>
-              </span>
+              <Logo />
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-muted">
               Turn plain text into 100+ unicode fancy styles — fast, free and

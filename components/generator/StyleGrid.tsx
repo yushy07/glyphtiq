@@ -15,6 +15,7 @@ interface StyleGridProps {
   trendingIds: string[];
   surpriseId: string | null;
   compatById?: Record<string, CompatibilityResult>;
+  variantsByCanonical?: Record<string, ConvertedResult[]>;
   onCopy: (result: ConvertedResult) => void;
   onToggleFavorite: (result: ConvertedResult) => void;
   onToggleCompare: (result: ConvertedResult) => void;
@@ -31,6 +32,7 @@ export function StyleGrid({
   trendingIds,
   surpriseId,
   compatById,
+  variantsByCanonical,
   onCopy,
   onToggleFavorite,
   onToggleCompare,
@@ -72,6 +74,7 @@ export function StyleGrid({
               isTrending={trendingIds.includes(result.style.id)}
               highlighted={surpriseId === result.style.id}
               compat={compatById?.[result.style.id]}
+              variants={variantsByCanonical?.[result.style.id]}
               onCopy={onCopy}
               onToggleFavorite={onToggleFavorite}
               onToggleCompare={onToggleCompare}

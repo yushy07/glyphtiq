@@ -97,6 +97,15 @@
   -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
+@utility panel-surface {
+  background-color: rgb(30 30 34);
+  background-image:
+    radial-gradient(120% 80% at 50% -20%, rgb(139 92 246 / 0.16), transparent 55%),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015) 30%, rgb(255 255 255 / 0));
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+}
+
 body::after {
   content: "";
   position: fixed;

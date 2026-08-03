@@ -7,6 +7,7 @@ import { MobileNav } from "@/components/layout/MobileNav";
 import { ToastProvider } from "@/components/ui/Toast";
 import ClickSpark from "@/components/ui/ClickSpark";
 import FloatingLines from "@/components/ui/FloatingLines";
+import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphy.app";
 
@@ -16,8 +17,7 @@ export const metadata: Metadata = {
     default: "Glyphy — Fancy Text Generator",
     template: "%s · Glyphy",
   },
-  description:
-    "Turn plain text into 100+ unicode fancy styles — bold, cursive, gothic, zalgo, bubble and more. Fast, free and 100% in your browser.",
+  description: `Turn plain text into ${STYLE_COUNT_LABEL} unicode fancy styles — bold, cursive, gothic, zalgo, bubble and more. Fast, free and 100% in your browser.`,
   manifest: "/manifest.json",
   keywords: [
     "fancy text",
@@ -29,8 +29,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Glyphy — Fancy Text Generator",
-    description:
-      "100+ unicode styles for your text. Bold, cursive, gothic, bubble and more — right in your browser.",
+    description: `${STYLE_COUNT_LABEL} unicode styles for your text. Bold, cursive, gothic, bubble and more — right in your browser.`,
     url: SITE_URL,
     siteName: "Glyphy",
     type: "website",
@@ -38,7 +37,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "Glyphy — Fancy Text Generator",
-    description: "100+ unicode styles, converted locally.",
+    description: `${STYLE_COUNT_LABEL} unicode styles, converted locally.`,
   },
 };
 

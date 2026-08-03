@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 import { Globe, Grid2x2, Lock, ShieldCheck, Sparkles, Wand2, Zap } from "lucide-react";
 import { Generator } from "@/components/generator/Generator";
-import BorderGlow from "@/components/ui/BorderGlow";
+import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
 
 const QUICK_FACTS = [
   {
     icon: Sparkles,
-    title: "100+ Styles",
+    title: `${STYLE_COUNT_LABEL} Styles`,
     subtitle: "Unicode magic",
   },
   {
@@ -35,7 +35,7 @@ const WHY_FEATURES = [
   },
   {
     icon: Sparkles,
-    title: "100+ Unicode Styles",
+    title: `${STYLE_COUNT_LABEL} Unicode Styles`,
     description:
       "Transform plain words into bold, gothic, cursive, bubble, zalgo, and decorative fonts with live instant preview.",
   },
@@ -63,7 +63,7 @@ export default function HomePage() {
             Make your words <span className="gradient-text">flow</span>
           </h1>
           <p className="max-w-xl text-sm leading-relaxed text-foreground/80 sm:text-base">
-            Turn plain text into 100+ unicode styles — bold, cursive, gothic,
+            Turn plain text into {STYLE_COUNT_LABEL} unicode styles — bold, cursive, gothic,
             bubble and more. Everything converts right in your browser, over a
             living liquid canvas.
           </p>
@@ -120,18 +120,9 @@ export default function HomePage() {
         </h2>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
           {WHY_FEATURES.map((feature) => (
-            <BorderGlow
+            <div
               key={feature.title}
-              animated
-              edgeSensitivity={30}
-              glowColor="139, 92, 246"
-              backgroundColor="color-mix(in srgb, var(--surface) 50%, transparent)"
-              borderRadius={20}
-              glowRadius={30}
-              glowIntensity={1.8}
-              coneSpread={20}
-              colors={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-              className="h-full w-full backdrop-blur-xl"
+              className="h-full w-full overflow-hidden rounded-[20px] border border-border bg-surface/50 backdrop-blur-xl"
             >
               <div className="flex h-full flex-col p-6 text-left sm:p-7">
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary shadow-sm shadow-primary/20">
@@ -144,7 +135,7 @@ export default function HomePage() {
                   {feature.description}
                 </p>
               </div>
-            </BorderGlow>
+            </div>
           ))}
         </div>
       </section>

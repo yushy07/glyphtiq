@@ -80,7 +80,7 @@ app/                 # App Router pages, API routes, sitemap, robots
 components/
   generator/         # Generator, style grid/card, symbol library, comparison tray, gaming composer
   layout/            # Header, footer, mobile nav, apps menu
-  ui/                # BorderGlow, LiquidEther, AnimatedList, MagicBento, etc.
+  ui/                # Button, Toast, AnimatedList, FloatingLines, ClickSpark, etc.
   filters/           # Search + category filter
   contact/           # Contact form
 lib/

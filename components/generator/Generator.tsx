@@ -4,10 +4,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Flame, History, Keyboard, ListFilter, Shuffle, Sparkles, Star, Timer, X } from "lucide-react";
-import { CATEGORIES, convertAll, searchStyles } from "@/lib/text-engine/engine";
+import { CATEGORIES, convertAll, searchStyles, sortResults } from "@/lib/text-engine/engine";
+import type { SortKey } from "@/lib/text-engine/engine";
+import { resolveStyleMetadata } from "@/lib/text-engine/quality";
 import { getStyleById } from "@/lib/text-engine/styles";
+import { groupVariants } from "@/lib/text-engine/variants";
 import type { ConvertedResult, StyleCategory, TextStyle } from "@/lib/text-engine/types";
 import { clampText, getPaginationItems } from "@/lib/utils";
+import { scrollToStyleById } from "@/lib/scrollToStyle";
 import { isStringArray } from "@/lib/validation";
 import { track } from "@/lib/analytics";
 import { useClipboard } from "@/hooks/useClipboard";
@@ -15,7 +19,6 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentStyles } from "@/hooks/useRecentStyles";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useToast } from "@/components/ui/Toast";
-import BorderGlow from "@/components/ui/BorderGlow";
 import { GeneratorInput } from "./GeneratorInput";
 import { GeneratorToolbar } from "./GeneratorToolbar";
 import { StyleGrid } from "./StyleGrid";
@@ -24,6 +27,8 @@ import { ComparisonTray } from "./ComparisonTray";
 import type { PreviewSize } from "./StyleCard";
 import SearchInput from "@/components/filters/SearchInput";
 import { CategoryFilter, CategoryPill, type CategoryFilterValue } from "@/components/filters/CategoryFilter";
+import { FamilyFilter, FamilyPill, type FamilyFilterValue } from "@/components/filters/FamilyFilter";
+import { SortFilter } from "@/components/filters/SortFilter";
 import Button from "@/components/ui/Button";
 import AnimatedList from "@/components/ui/AnimatedList";
 
@@ -99,6 +104,8 @@ export function Generator() {
 
   const [text, setText] = useState("");
   const [category, setCategory] = useState<CategoryFilterValue>("all");
+  const [family, setFamily] = useState<FamilyFilterValue>("all");
+  const [sort, setSort] = useState<SortKey>("recommended");
   const [query, setQuery] = useState("");
   const [previewSize, setPreviewSize] = useState<PreviewSize>("md");
   const [zalgoIntensity, setZalgoIntensity] = useState(50);
@@ -124,15 +131,26 @@ export function Generator() {
     [text, zalgoIntensity],
   );
 
+  const grouped = useMemo(() => groupVariants(results), [results]);
+
   const counts = useMemo(() => {
     const c: Partial<Record<StyleCategory, number>> = {};
     for (const r of results) c[r.style.category] = (c[r.style.category] ?? 0) + 1;
     return c;
   }, [results]);
 
+  const familyCounts = useMemo(() => {
+    const c: Partial<Record<string, number>> = {};
+    for (const r of results) {
+      const families = resolveStyleMetadata(r.style).families;
+      for (const f of families) c[f] = (c[f] ?? 0) + 1;
+    }
+    return c;
+  }, [results]);
+
   const visible = useMemo(() => {
-    const ids = new Set(searchStyles(query, category).map((s) => s.id));
-    let list = results.filter((r) => ids.has(r.style.id));
+    const ids = new Set(searchStyles(query, category, family).map((s) => s.id));
+    let list = grouped.cards.filter((r) => ids.has(r.style.id));
     if (view === "favorites") {
       const fav = new Set(favorites);
       list = list.filter((r) => fav.has(r.style.id));
@@ -140,19 +158,23 @@ export function Generator() {
       const rec = new Set(recent.map((e) => e.styleId));
       list = list.filter((r) => rec.has(r.style.id));
     }
-    const favIndex = new Map(favorites.map((id, i) => [id, i]));
-    list.sort((a, b) => {
-      const af = favIndex.get(a.style.id) ?? Number.MAX_SAFE_INTEGER;
-      const bf = favIndex.get(b.style.id) ?? Number.MAX_SAFE_INTEGER;
-      return af - bf;
-    });
+    if (view === "all") {
+      list = sort === "trending" ? sortResults(list, sort, trending) : sortResults(list, sort);
+    } else {
+      const favIndex = new Map(favorites.map((id, i) => [id, i]));
+      list.sort((a, b) => {
+        const af = favIndex.get(a.style.id) ?? Number.MAX_SAFE_INTEGER;
+        const bf = favIndex.get(b.style.id) ?? Number.MAX_SAFE_INTEGER;
+        return af - bf;
+      });
+    }
     return list;
-  }, [results, query, category, favorites, recent, view]);
+  }, [grouped, query, category, family, favorites, recent, view, sort, trending]);
 
-  // Reset page to 1 whenever search query, category, or view changes
+  // Reset page to 1 whenever search query, category, family, sort, or view changes
   useEffect(() => {
     setPage(1);
-  }, [query, category, view]);
+  }, [query, category, family, sort, view]);
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(visible.length / PAGE_SIZE)),
@@ -231,23 +253,19 @@ export function Generator() {
 
   useEffect(() => {
     if (!surpriseId) return;
-    const timer = setTimeout(() => {
-      document
-        .getElementById(`style-${surpriseId}`)
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 50);
-    return () => clearTimeout(timer);
+    return scrollToStyleById(surpriseId);
   }, [surpriseId, safePage]);
 
   const handleCopy = useCallback(
     async (result: ConvertedResult) => {
-      const ok = await copy(result.text);
+      const copyText = text.trim() ? result.text : result.style.convert("Glyphy");
+      const ok = await copy(copyText);
       if (!ok) return push("Could not copy", "error");
       record(result.style.id);
       track("copy", result.style.id);
       push(`Copied ${result.style.name}`, "copy");
     },
-    [copy, record, push],
+    [copy, record, push, text],
   );
 
 
@@ -271,6 +289,8 @@ export function Generator() {
   const handleReset = useCallback(() => {
     setQuery("");
     setCategory("all");
+    setFamily("all");
+    setSort("recommended");
     setPreviewSize("md");
     setZalgoIntensity(50);
     setSurpriseId(null);
@@ -280,6 +300,7 @@ export function Generator() {
 
   const goToStyle = useCallback((style: TextStyle) => {
     setCategory("all");
+    setFamily("all");
     setQuery(style.id);
     setSurpriseId(style.id);
   }, []);
@@ -416,18 +437,7 @@ export function Generator() {
   return (
     <div>
       <div ref={inputCardRef} className="mx-auto w-full max-w-5xl px-4 pt-2 scroll-mt-6">
-        <BorderGlow
-          animated
-          edgeSensitivity={30}
-          glowColor="139, 92, 246"
-          backgroundColor="color-mix(in srgb, var(--surface) 45%, transparent)"
-          borderRadius={24}
-          glowRadius={40}
-          glowIntensity={2.0}
-          coneSpread={25}
-          colors={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-          className="w-full backdrop-blur-xl p-5 sm:p-7"
-        >
+        <div className="w-full overflow-hidden rounded-[24px] border border-border glass p-5 sm:p-7">
           <GeneratorInput
             value={text}
             maxLength={MAX_LENGTH}
@@ -440,20 +450,7 @@ export function Generator() {
             textareaRef={textareaRef}
           />
 
-          {!text.trim() ? (
-            <div className="mt-4 flex min-h-[160px] flex-col items-center justify-center rounded-2xl border border-border/40 bg-background/30 p-8 text-center">
-              <div className="mb-2.5 flex size-9 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
-                <Sparkles className="size-4" aria-hidden />
-              </div>
-              <p className="text-sm font-semibold text-foreground/80">
-                Your styles will appear here
-              </p>
-              <p className="mt-1 text-xs text-muted">
-                Start typing to see the magic
-              </p>
-            </div>
-          ) : (
-            <div className="mt-4 space-y-4">
+          <div className="mt-4 space-y-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center justify-between">
                 <SearchInput
                   ref={searchRef}
@@ -461,12 +458,17 @@ export function Generator() {
                   onChange={setQuery}
                   className="w-full sm:max-w-xs"
                 />
-                <p className="hidden text-xs font-medium text-muted sm:block">
-                  {results.length} styles · {visible.length} shown
-                </p>
+                <div className="flex items-center justify-between gap-3 sm:justify-end">
+                  <p className="text-xs font-medium text-muted">
+                    {grouped.cards.length} styles · {visible.length} shown
+                  </p>
+                  <SortFilter value={sort} onChange={setSort} />
+                </div>
               </div>
 
               <CategoryFilter value={category} onChange={setCategory} counts={counts} />
+
+              <FamilyFilter value={family} onChange={setFamily} counts={familyCounts} />
 
               <div className="static sm:sticky sm:top-16 sm:z-20 sm:-mx-4 sm:border-y sm:border-border sm:bg-background/60 sm:px-4 sm:py-3 sm:backdrop-blur-xl">
                 <GeneratorToolbar
@@ -543,6 +545,7 @@ export function Generator() {
                   comparedIds={comparison}
                   trendingIds={trendingStyles.map((s) => s.id)}
                   surpriseId={surpriseId}
+                  variantsByCanonical={grouped.variantsByCanonical}
                   onCopy={(r) => void handleCopy(r)}
                   onToggleFavorite={handleToggleFavorite}
                   onToggleCompare={handleToggleCompare}
@@ -611,8 +614,7 @@ export function Generator() {
                 )}
               </section>
             </div>
-          )}
-        </BorderGlow>
+        </div>
 
         <section className="mt-6" aria-label="Style picker">
           <button
@@ -698,7 +700,7 @@ export function Generator() {
               className="fixed inset-x-0 bottom-0 z-50 max-h-[75dvh] overflow-y-auto rounded-t-3xl border-t border-border bg-background/80 p-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] backdrop-blur-xl sm:hidden"
             >
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-extrabold text-foreground">Filter by category</h2>
+                <h2 className="text-lg font-extrabold text-foreground">Filters</h2>
                 <button
                   type="button"
                   aria-label="Close"
@@ -708,6 +710,7 @@ export function Generator() {
                   <X className="size-5" aria-hidden />
                 </button>
               </div>
+              <h3 className="mb-2 text-xs font-bold tracking-wide text-muted uppercase">Category</h3>
               <div className="grid grid-cols-3 gap-2">
                 {(["all", "bold", "italic", "cursive", "bubble", "gothic", "monospace", "smallcaps", "vaporwave", "upsidedown", "underline", "strikethrough", "glitch", "zalgo", "kawaii", "symbol", "decorated"] as CategoryFilterValue[]).map((value) => (
                   <CategoryPill
@@ -718,6 +721,22 @@ export function Generator() {
                     layoutId="category-pill-drawer"
                     onClick={() => {
                       setCategory(value);
+                      setDrawerOpen(false);
+                    }}
+                  />
+                ))}
+              </div>
+              <h3 className="mb-2 mt-5 text-xs font-bold tracking-wide text-muted uppercase">Family</h3>
+              <div className="grid grid-cols-3 gap-2">
+                {(["all", "elegant", "minimal", "bold", "gothic", "aesthetic", "cute", "bubble", "gaming", "futuristic", "cyberpunk", "japanese", "vintage", "serif", "sans", "monospace", "handwritten", "script", "double-struck", "small-caps", "tiny", "emoji", "decorative", "glitch", "wide", "square", "rounded", "symbolic", "unicode-art"] as FamilyFilterValue[]).map((value) => (
+                  <FamilyPill
+                    key={value}
+                    value={value}
+                    active={family === value}
+                    count={value !== "all" ? familyCounts[value] : undefined}
+                    layoutId="family-pill-drawer"
+                    onClick={() => {
+                      setFamily(value);
                       setDrawerOpen(false);
                     }}
                   />

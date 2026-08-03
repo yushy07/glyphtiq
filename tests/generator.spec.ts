@@ -6,7 +6,7 @@ test.describe("Glyphy generator", () => {
   });
 
   test("shows the generator and converts live", async ({ page }) => {
-    await expect(page.getByRole("heading", { name: /fancy text/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /make your words flow/i })).toBeVisible();
     const input = page.getByLabel("Text to convert");
     await input.fill("Hello");
     await expect(page.getByText("𝐇𝐞𝐥𝐥𝐨", { exact: true })).toBeVisible();
@@ -47,7 +47,7 @@ test.describe("Glyphy generator", () => {
 
   test("surprise me highlights a style", async ({ page }) => {
     await page.getByLabel("Text to convert").fill("ooh");
-    await page.getByRole("button", { name: "Surprise", exact: true }).click();
+    await page.getByRole("button", { name: /surprise/i }).click();
     await expect(page.getByText(/Surprise:/)).toBeVisible();
   });
 });

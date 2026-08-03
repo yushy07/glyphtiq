@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BorderGlow from "@/components/ui/BorderGlow";
 import { PageHeader, Section } from "@/components/layout/PageSection";
+import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "Glyphy turns plain text into 100+ unicode styles — right in your browser. Fast, free and private.",
+  description: `Glyphy turns plain text into ${STYLE_COUNT_LABEL} unicode styles — right in your browser. Fast, free and private.`,
 };
 
 export default function AboutPage() {
@@ -25,7 +24,7 @@ export default function AboutPage() {
         <Section title="What Glyphy is">
           <p>
             Glyphy is a free, browser-based fancy text generator. Type something
-            plain and it instantly shows you 100+ unicode variations — bold,
+            plain and it instantly shows you {STYLE_COUNT_LABEL} unicode variations — bold,
             cursive, gothic, bubble, zalgo, upside-down and everything in
             between.
           </p>
@@ -89,18 +88,7 @@ export default function AboutPage() {
       </div>
 
       <section className="mx-auto mt-16 w-full max-w-4xl sm:mt-20">
-        <BorderGlow
-          animated
-          edgeSensitivity={30}
-          glowColor="139, 92, 246"
-          backgroundColor="color-mix(in srgb, var(--surface) 45%, transparent)"
-          borderRadius={28}
-          glowRadius={40}
-          glowIntensity={2.2}
-          coneSpread={25}
-          colors={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-          className="w-full backdrop-blur-xl"
-        >
+        <div className="w-full overflow-hidden rounded-[28px] border border-border glass">
           <div className="flex flex-col items-center gap-2 px-8 py-10 text-center sm:px-12 sm:py-12">
             <h3 className="text-xl font-black text-foreground sm:text-2xl">
               Made to be <span className="gradient-text">shared</span>
@@ -116,7 +104,7 @@ export default function AboutPage() {
               Get in touch
             </Link>
           </div>
-        </BorderGlow>
+        </div>
       </section>
     </div>
   );

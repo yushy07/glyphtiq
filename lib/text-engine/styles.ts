@@ -30,8 +30,8 @@ const categoryOf = (id: string): StyleCategory => {
   if (id === "smallCaps") return "smallcaps";
   if (id === "fullwidth" || id === "spacedOut" || id.startsWith("aesthetic")) return "vaporwave";
   if (id === "upsideDown" || id === "mirrored") return "upsidedown";
-  if (id === "underline" || id === "underlineDouble" || id === "underlineWavy" || id === "overline" || id === "overlineDouble" || id === "underdot" || id === "macron" || id === "caron" || id === "grave" || id === "circumflex" || id === "umlaut" || id === "doubleAcute" || id === "hookAbove" || id === "ringAbove" || id === "breve" || id === "overdot" || id === "tildeAbove") return "underline";
-  if (id === "strike" || id === "strikeShort" || id === "strikeSlash" || id === "strikeDouble" || id === "strikeShortSlash" || id === "strikeX" || id === "strikeTilde") return "strikethrough";
+  if (id === "underline" || id === "underlineDouble" || id === "underlineWavy" || id === "overline" || id === "overlineDouble" || id === "underdot" || id === "macron" || id === "caron" || id === "grave" || id === "circumflex" || id === "umlaut" || id === "doubleAcute" || id === "hookAbove" || id === "ringAbove" || id === "breve" || id === "overdot" || id === "tildeAbove" || id === "xAbove" || id === "doubleGrave" || id === "invertedBreve") return "underline";
+  if (id === "strike" || id === "strikeShort" || id === "strikeSlash" || id === "strikeDouble" || id === "strikeShortSlash" || id === "strikeX" || id === "strikeTilde" || id === "strikeWave") return "strikethrough";
   if (id === "glitch" || id === "glitchHeavy" || id === "jitter" || id === "glitchFlicker" || id === "glitchStatic" || id === "glitchVhs") return "glitch";
   if (id === "zalgo" || id === "zalgoMini" || id === "zalgoHorror" || id === "zalgoLight" || id === "zalgoHeavy" || id === "zalgoNightmare") return "zalgo";
   if (id.startsWith("kawaii")) return "kawaii";
@@ -174,6 +174,9 @@ export const STYLES: TextStyle[] = [
   font("fraktur", "Fraktur", "fraktur", "Old-school gothic blackletter."),
   font("boldFraktur", "Bold Fraktur", "boldFraktur", "Dark and chunky gothic."),
   font("doubleStruck", "Double-Struck", "doubleStruck", "Blackboard bold."),
+  font("runic", "Runic", "runic", "Ancient runes.", "gothic"),
+  font("cyrillic", "Cyrillic", "cyrillic", "Russian lookalikes.", "gothic"),
+  font("greek", "Greek", "greek", "Greek letter lookalikes.", "gothic"),
   font("monospace", "Monospace", "monospace", "Fixed-width typewriter."),
   font("sans", "Sans Serif", "sans", "Clean geometric sans."),
   font("sansBold", "Sans Serif Bold", "sansBold", "Chunky sans-serif."),
@@ -278,6 +281,9 @@ export const STYLES: TextStyle[] = [
   wrap("quoteBox", "Quote Box", "❝", "❞", "Fancy quotes."),
   wrap("singleQuoteBox", "Single Quote Box", "'", "'", "Straight quotes."),
   wrap("energyBox", "Energy Box", "⚡", "⚡", "Electrified.", undefined, EMOJI_RISK),
+  wrap("spiralBox", "Spiral Box", "❃", "❃", "Swirling charm."),
+  wrap("hexCyberBox", "Hexagon Cyber", "⬢", "⬢", "Cyber hexagon frame.", undefined, EMOJI_RISK),
+  wrap("fireBox", "Fire Box", "✴", "✴", "Spark flare."),
   wrap("peaceBox", "Peace Box", "☮", "☮", "Peaceful vibes.", undefined, EMOJI_RISK),
   wrap("loveBox", "Love Box", "❤", "❤", "All the love.", undefined, EMOJI_RISK),
   wrap("checkBox", "Check Box", "✓", "✓", "Approved marks.", undefined, EMOJI_RISK),
@@ -315,11 +321,15 @@ export const STYLES: TextStyle[] = [
   combining("breve", "Breve", COMBINING.breve, "Gentle arc above."),
   combining("overdot", "Overdot", COMBINING.overdot, "Dot above each letter."),
   combining("tildeAbove", "Tilde Above", COMBINING.tildeAbove, "Wavy line above."),
+  combining("xAbove", "X Above", COMBINING.xAbove, "A small x above."),
+  combining("doubleGrave", "Double Grave", COMBINING.doubleGrave, "Twin grave accents."),
+  combining("invertedBreve", "Inverted Breve", COMBINING.invertedBreve, "Upside-down arc above."),
 
   // ——— Strikethrough variants ———
   combining("strikeShortSlash", "Short Slash Strike", COMBINING.shortSolidus, "Short diagonal slash."),
   custom("strikeX", "X Strike", (t) => applyPerChar(t, COMBINING.longStrike + COMBINING.slash), "Crossed-out letters."),
   custom("strikeTilde", "Wave Strike", (t) => applyPerChar(t, COMBINING.longStrike + COMBINING.tildeBelow), "Strike with a wave."),
+  custom("strikeWave", "Strike Wave", (t) => applyPerChar(t, COMBINING.longStrike + COMBINING.doubleTilde), "Double-wave strike."),
 
   // ——— Glitch variants ———
   custom("glitchFlicker", "Glitch Flicker", (t) => glitchFn(t, 3), "Flickering signal."),
@@ -480,6 +490,13 @@ export const STYLES: TextStyle[] = [
   // ——— Decorated: per-letter framing ———
   custom("perCharBrackets", "Bracket Every Letter", (t) => Array.from(t).map((ch) => (/\s/.test(ch) ? ch : "[" + ch + "]")).join(""), "Every letter framed."),
   custom("perCharParens", "Paren Every Letter", (t) => Array.from(t).map((ch) => (/\s/.test(ch) ? ch : "(" + ch + ")")).join(""), "Every letter held."),
+  custom("caged", "Caged", (t) => Array.from(t).map((ch) => (/\s/.test(ch) ? ch : "【" + ch + "】")).join(""), "Every letter boxed in."),
+  custom("boxFrame", "Box Frame", (t) => {
+    const lines = t.split("\n");
+    const width = Math.max(1, ...lines.map((l) => Array.from(l).length));
+    const bar = "─".repeat(width + 2);
+    return ["┌" + bar + "┐", ...lines.map((l) => "│ " + l.padEnd(width) + " │"), "└" + bar + "┘"].join("\n");
+  }, "A neat box around the text."),
 ];
 
 export const STYLE_MAP: Record<string, TextStyle> = Object.fromEntries(

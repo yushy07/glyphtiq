@@ -1,22 +1,10 @@
 import Link from "next/link";
 import { SearchX } from "lucide-react";
-import BorderGlow from "@/components/ui/BorderGlow";
 
 export default function NotFound() {
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center px-4 py-24 text-center">
-      <BorderGlow
-        animated
-        edgeSensitivity={30}
-        glowColor="139, 92, 246"
-        backgroundColor="color-mix(in srgb, var(--surface) 45%, transparent)"
-        borderRadius={28}
-        glowRadius={40}
-        glowIntensity={2.2}
-        coneSpread={25}
-        colors={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-        className="w-full backdrop-blur-xl"
-      >
+      <div className="w-full overflow-hidden rounded-[28px] border border-border glass">
         <div className="flex flex-col items-center justify-center gap-4 px-8 py-12 text-center">
           <span className="grid size-14 place-items-center rounded-2xl bg-surface-2">
             <SearchX className="size-7 text-muted" aria-hidden />
@@ -34,7 +22,7 @@ export default function NotFound() {
             Make something fancy
           </Link>
         </div>
-      </BorderGlow>
+      </div>
     </div>
   );
 }

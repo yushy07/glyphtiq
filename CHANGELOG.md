@@ -38,5 +38,5 @@ First release.
 - Favorites, recent styles, style search, "surprise me", download/copy-all.
 - Share links and global trending (optional, via Neon/PostgreSQL + Drizzle).
 - Rate limiting (Upstash Redis + edge middleware).
-- Dark-first design system with animated canvases (LiquidEther, BorderGlow, AnimatedList, MagicBento).
+- Dark-first design system with animated canvases (FloatingLines, AnimatedList).
 - Vitest unit tests and Playwright e2e tests.

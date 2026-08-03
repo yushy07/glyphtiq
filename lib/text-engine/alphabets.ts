@@ -139,6 +139,23 @@ export const ALPHABETS: Record<string, Alphabet> = {
     upper: "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢ",
     lower: "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢ",
   },
+  runic: {
+    // Rune-per-letter mapping over the full 26-letter Latin alphabet.
+    upper: "ᚨᛒᛍᛞᛖᚠᚷᚺᛁᛃᚲᛚᛗᚾᛟᛈᛩᚱᛋᛏᚢᚡᚹᛉᛦᛉ",
+    lower: "ᚨᛒᛍᛞᛖᚠᚷᚺᛁᛃᚲᛚᛗᚾᛟᛈᛩᚱᛋᛏᚢᚡᚹᛉᛦᛉ",
+  },
+  cyrillic: {
+    // Latin-to-Cyrillic lookalikes. Both cases map to the uppercase
+    // Cyrillic set so mixed-case input reads as proper Russian text.
+    upper: "АБЦДЕФГНІЈКЛМНОПԚРСТУВЩХЫЗ",
+    lower: "АБЦДЕФГНІЈКЛМНОПԚРСТУВЩХЫЗ",
+  },
+  greek: {
+    // Latin-to-Greek lookalikes, including lunate sigma for C and
+    // digamma for V so every letter has a distinct Greek glyph.
+    upper: "ΑΒϹΔΕΦΓΗΙϳΚΛΜΝΟΡΘΡΣΤΥϜΩΧΥΖ",
+    lower: "ΑΒϹΔΕΦΓΗΙϳΚΛΜΝΟΡΘΡΣΤΥϜΩΧΥΖ",
+  },
 };
 
 /** Builds a codepoint -> replacement lookup for a single alphabet. */

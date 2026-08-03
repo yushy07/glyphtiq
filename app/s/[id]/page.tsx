@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Sparkles, Timer } from "lucide-react";
-import BorderGlow from "@/components/ui/BorderGlow";
 import { getShare } from "@/lib/database/shares";
 import { convertToStyle } from "@/lib/text-engine/engine";
 import { getStyleById } from "@/lib/text-engine/styles";
@@ -39,18 +38,7 @@ export default async function SharedPage({ params }: Props) {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:py-16">
-      <BorderGlow
-        animated
-        edgeSensitivity={30}
-        glowColor="139, 92, 246"
-        backgroundColor="color-mix(in srgb, var(--surface) 45%, transparent)"
-        borderRadius={28}
-        glowRadius={40}
-        glowIntensity={2.2}
-        coneSpread={25}
-        colors={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-        className="w-full backdrop-blur-xl"
-      >
+      <div className="w-full overflow-hidden rounded-[28px] border border-border glass">
         <div className="overflow-hidden rounded-3xl border border-border shadow-sm">
           <div className="flex items-center justify-between gap-2 border-b border-border px-5 py-4">
             <div className="flex items-center gap-2">
@@ -94,7 +82,7 @@ export default async function SharedPage({ params }: Props) {
             </Link>
           </div>
         </div>
-      </BorderGlow>
+      </div>
     </div>
   );
 }

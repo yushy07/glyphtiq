@@ -24,18 +24,24 @@ import {
   Trophy,
   Youtube,
 } from "lucide-react";
-import { convertForApp, searchStyles, stylesForApp } from "@/lib/text-engine/engine";
+import { convertForApp, searchStyles, sortResults, stylesForApp } from "@/lib/text-engine/engine";
+import type { SortKey } from "@/lib/text-engine/engine";
 import { compatibilityFor } from "@/lib/text-engine/compat";
 import { getAppBySlug, limitForUseCase } from "@/lib/text-engine/apps";
+import { getAppSections } from "@/lib/text-engine/curation";
+import { resolveStyleMetadata } from "@/lib/text-engine/quality";
 import { getStyleById } from "@/lib/text-engine/styles";
+import { groupVariants } from "@/lib/text-engine/variants";
 import type { AppConfig, ConvertedResult, TextStyle } from "@/lib/text-engine/types";
 import type { CompatibilityResult } from "@/lib/text-engine/compat";
 import { clampText } from "@/lib/utils";
+import { scrollToStyleById } from "@/lib/scrollToStyle";
 import { isStringArray } from "@/lib/validation";
 import { track } from "@/lib/analytics";
 import { useClipboard } from "@/hooks/useClipboard";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentStyles } from "@/hooks/useRecentStyles";
+import { useRecentApps } from "@/hooks/useRecentApps";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useToast } from "@/components/ui/Toast";
 import { GeneratorInput } from "./GeneratorInput";
@@ -43,9 +49,12 @@ import { StyleGrid } from "./StyleGrid";
 import { SymbolLibrary } from "./SymbolLibrary";
 import { ComparisonTray } from "./ComparisonTray";
 import { GamingComposer } from "./GamingComposer";
+import { AppSections } from "./AppSections";
 import type { PreviewSize } from "./StyleCard";
 import SearchInput from "@/components/filters/SearchInput";
 import { CategoryFilter, type CategoryFilterValue } from "@/components/filters/CategoryFilter";
+import { FamilyFilter, type FamilyFilterValue } from "@/components/filters/FamilyFilter";
+import { SortFilter } from "@/components/filters/SortFilter";
 import Button from "@/components/ui/Button";
 
 const MAX_LENGTH = 500;
@@ -78,9 +87,12 @@ export function AppGenerator({ app }: { app: AppConfig }) {
   const { copy } = useClipboard();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const { recent, record } = useRecentStyles();
+  const { record: recordApp } = useRecentApps();
 
   const [text, setText] = useState("");
   const [category, setCategory] = useState<CategoryFilterValue>(app.defaultCategory);
+  const [family, setFamily] = useState<FamilyFilterValue>("all");
+  const [sort, setSort] = useState<SortKey>("recommended");
   const [query, setQuery] = useState("");
   const [previewSize] = useState<PreviewSize>("md");
   const [zalgoIntensity] = useState(50);
@@ -109,20 +121,28 @@ export function AppGenerator({ app }: { app: AppConfig }) {
     [composedText, app.key, zalgoIntensity],
   );
 
+  const grouped = useMemo(() => groupVariants(results), [results]);
+
+  const sections = useMemo(
+    () => getAppSections(app.key, [], grouped.cards.map((r) => r.style)),
+    [app.key, grouped],
+  );
+
   const limit = useMemo(() => limitForUseCase(app, useCase), [app, useCase]);
 
   const compatById = useMemo(() => {
     const map: Record<string, CompatibilityResult> = {};
-    for (const r of results) {
+    for (const r of grouped.cards) {
       map[r.style.id] = compatibilityFor(r.style, app.key, app, Array.from(r.text).length, limit);
     }
     return map;
-  }, [results, app, limit]);
+  }, [grouped, app, limit]);
 
   const visible = useMemo(() => {
-    const ids = new Set(searchStyles(query, category).map((s) => s.id));
-    return results.filter((r) => ids.has(r.style.id));
-  }, [results, query, category]);
+    const ids = new Set(searchStyles(query, category, family).map((s) => s.id));
+    const list = grouped.cards.filter((r) => ids.has(r.style.id));
+    return sortResults(list, sort);
+  }, [grouped, query, category, family, sort]);
 
   const recentStyles = useMemo(
     () => recent.map((e) => getStyleById(e.styleId)).filter((s): s is TextStyle => !!s),
@@ -152,24 +172,24 @@ export function AppGenerator({ app }: { app: AppConfig }) {
 
   useEffect(() => {
     if (!surpriseId) return;
-    document
-      .getElementById(`style-${surpriseId}`)
-      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return scrollToStyleById(surpriseId);
   }, [surpriseId]);
 
   useEffect(() => {
     track("view", undefined, undefined, app.slug);
-  }, [app.slug]);
+    recordApp(app.slug);
+  }, [app.slug, recordApp]);
 
   const handleCopy = useCallback(
     async (result: ConvertedResult) => {
-      const ok = await copy(result.text);
+      const copyText = composedText.trim() ? result.text : result.style.convert("Glyphy");
+      const ok = await copy(copyText);
       if (!ok) return push("Could not copy", "error");
       record(result.style.id);
       track("copy", result.style.id, undefined, app.slug);
       push(`Copied ${result.style.name}`, "copy");
     },
-    [copy, record, push, app.slug],
+    [copy, record, push, composedText, app.slug],
   );
 
   const handleCopyBest = useCallback(async () => {
@@ -285,6 +305,7 @@ export function AppGenerator({ app }: { app: AppConfig }) {
 
   const goToStyle = useCallback((style: TextStyle) => {
     setCategory("all");
+    setFamily("all");
     setQuery(style.id);
     setSurpriseId(style.id);
   }, []);
@@ -433,10 +454,13 @@ export function AppGenerator({ app }: { app: AppConfig }) {
 
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
         <SearchInput value={query} onChange={setQuery} className="w-full sm:max-w-xs" />
-        <p className="hidden text-xs font-medium text-muted sm:block">
-          {appStyles.length} compatible styles · {visible.length} shown
-        </p>
-        <div className="flex gap-2 sm:ml-auto">
+        <div className="flex items-center justify-between gap-3 sm:ml-auto sm:justify-end">
+          <p className="text-xs font-medium text-muted">
+            {appStyles.length} compatible styles · {visible.length} shown
+          </p>
+          <SortFilter value={sort} onChange={setSort} />
+        </div>
+        <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => void handleCopyBest()}>
             <Sparkles className="size-4" aria-hidden />
             Copy best style
@@ -453,6 +477,13 @@ export function AppGenerator({ app }: { app: AppConfig }) {
         onChange={setCategory}
         counts={countByCategory}
       />
+
+      <FamilyFilter
+        value={family}
+        onChange={setFamily}
+      />
+
+      <AppSections sections={sections} onPick={goToStyle} />
 
       <section className="mt-4 pb-28 sm:pb-8" aria-label="Converted styles">
         <h2 className="mb-3 text-lg font-extrabold text-foreground">
@@ -474,6 +505,7 @@ export function AppGenerator({ app }: { app: AppConfig }) {
           trendingIds={[]}
           surpriseId={surpriseId}
           compatById={compatById}
+          variantsByCanonical={grouped.variantsByCanonical}
           onCopy={(r) => void handleCopy(r)}
           onToggleFavorite={handleToggleFavorite}
           onToggleCompare={handleToggleCompare}

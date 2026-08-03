@@ -41,6 +41,41 @@ export type PlatformKey =
 
 export type AppType = "social" | "gaming" | "creator";
 
+/**
+ * Curated visual families a style can belong to. A style may belong to
+ * several families. These power the family filter, per-app curation and
+ * recommendations — not conversion.
+ */
+export type StyleFamily =
+  | "elegant"
+  | "minimal"
+  | "bold"
+  | "gothic"
+  | "aesthetic"
+  | "cute"
+  | "bubble"
+  | "gaming"
+  | "futuristic"
+  | "cyberpunk"
+  | "japanese"
+  | "vintage"
+  | "serif"
+  | "sans"
+  | "monospace"
+  | "handwritten"
+  | "script"
+  | "double-struck"
+  | "small-caps"
+  | "tiny"
+  | "emoji"
+  | "decorative"
+  | "glitch"
+  | "wide"
+  | "square"
+  | "rounded"
+  | "symbolic"
+  | "unicode-art";
+
 /** Compatibility score per platform, on a 0..100 scale. */
 export type CompatibilityScores = Partial<Record<PlatformKey, number>>;
 
@@ -77,6 +112,18 @@ export interface TextStyle {
   platforms?: CompatibilityScores;
   /** Hidden styles still convert but are excluded from the grid (reserved). */
   hidden?: boolean;
+  /** Curated visual families (filter/curation/recommendations). */
+  families?: StyleFamily[];
+  /** Internal cross-platform reliability 0..100. Never displayed. */
+  confidence?: number;
+  /** Readability score 0..100. */
+  readability?: number;
+  /** Visual uniqueness score 0..100. */
+  uniqueness?: number;
+  /** Popularity score 0..100 (curated baseline + real data when available). */
+  popularity?: number;
+  /** ISO date the style was added — drives the "New" sort. */
+  addedAt?: string;
 }
 
 export interface ConvertedResult {

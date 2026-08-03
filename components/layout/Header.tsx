@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Home, Sparkles, Type } from "lucide-react";
 import { AppsMenu } from "./AppsMenu";
 import { HeaderSearch } from "./HeaderSearch";
+import { Logo } from "./Logo";
 
 export function Header() {
   const pathname = usePathname();
@@ -17,12 +18,7 @@ export function Header() {
           href="/"
           className="flex shrink-0 items-center gap-2.5 rounded-full border border-border/80 bg-surface/60 px-3.5 py-1.5 shadow-sm backdrop-blur-md transition-all hover:border-primary/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
         >
-          <span className="grid size-7 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-primary to-secondary text-xs font-black text-white shadow-sm shadow-primary/30">
-            G
-          </span>
-          <span className="text-base font-extrabold tracking-tight">
-            <span className="gradient-text">Glyphy</span>
-          </span>
+          <Logo />
         </Link>
 
         {/* Center: Floating Pill Navigation */}

@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Gamepad2, Heart, Home, LayoutGrid, Mic, Settings, Star, Timer, X } from "lucide-react";
+import { ArrowRight, ChevronLeft, Flame, Gamepad2, Heart, Home, LayoutGrid, Mic, Settings, Star, Timer, X } from "lucide-react";
 import { APPS_BY_TYPE } from "@/lib/text-engine/apps";
 import type { AppType } from "@/lib/text-engine/types";
 import { cn } from "@/lib/utils";
+import { AppIcon } from "./AppIcon";
+import { POPULAR_APPS, niceActivityCount, shuffledPopular } from "./appsCuration";
+import { useRecentApps } from "@/hooks/useRecentApps";
 
 type Drawer = "apps" | "settings" | null;
+type AppsView = "home" | "all";
+
+const ALL_APPS = [
+  ...APPS_BY_TYPE.social,
+  ...APPS_BY_TYPE.gaming,
+  ...APPS_BY_TYPE.creator,
+];
 
 const GROUPS: Array<{ type: AppType; label: string; icon: typeof Heart }> = [
   { type: "social", label: "Social", icon: Heart },
@@ -36,6 +46,24 @@ const TABS = [
 export function MobileNav() {
   const pathname = usePathname();
   const [drawer, setDrawer] = useState<Drawer>(null);
+  const [appsView, setAppsView] = useState<AppsView>("home");
+  const [trendingApps, setTrendingApps] = useState(() => shuffledPopular(6));
+  const [activity, setActivity] = useState<Record<string, string>>({});
+  const { recent } = useRecentApps();
+
+  const recentApps = recent
+    .map((e) => ALL_APPS.find((app) => app.slug === e.slug))
+    .filter((app): app is (typeof ALL_APPS)[number] => !!app)
+    .slice(0, 3);
+
+  useEffect(() => {
+    if (drawer !== "apps") {
+      setAppsView("home");
+      return;
+    }
+    setTrendingApps(shuffledPopular(6));
+    setActivity(Object.fromEntries(ALL_APPS.map((app) => [app.slug, niceActivityCount()])));
+  }, [drawer]);
 
   const isActive = (href: string) => (href.startsWith("/") ? pathname === href.split("?")[0] : false);
 
@@ -105,11 +133,11 @@ export function MobileNav() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", stiffness: 380, damping: 34 }}
-              className="fixed inset-x-0 bottom-0 z-50 max-h-[70dvh] overflow-y-auto rounded-t-3xl border-t border-border bg-background/80 p-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] backdrop-blur-xl"
+              className="fixed inset-x-0 bottom-0 z-50 max-h-[70dvh] overflow-y-auto rounded-t-3xl border-t border-border bg-background/90 p-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] backdrop-blur-xl"
             >
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-lg font-extrabold text-foreground">
-                  {drawer === "apps" ? "All apps" : "Settings"}
+                  {drawer === "apps" ? (appsView === "home" ? "Apps" : "All apps") : "Settings"}
                 </h2>
                 <button
                   type="button"
@@ -122,38 +150,164 @@ export function MobileNav() {
               </div>
 
               {drawer === "apps" ? (
-                <div className="space-y-3">
-                  {GROUPS.map((group) => {
-                    const Icon = group.icon;
-                    return (
-                      <div key={group.type}>
-                        <p className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-muted uppercase">
-                          <Icon className="size-3" aria-hidden />
-                          {group.label}
+                <div className="space-y-4">
+                  <AnimatePresence mode="wait" initial={false}>
+                    {appsView === "home" ? (
+                      <motion.div
+                        key="home"
+                        initial={{ opacity: 0, x: -16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -16 }}
+                        transition={{ duration: 0.16 }}
+                      >
+                        <p className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-muted uppercase">
+                          <Flame className="size-3 text-secondary" aria-hidden />
+                          Popular right now
                         </p>
-                        <div className="grid grid-cols-2 gap-1.5">
-                          {APPS_BY_TYPE[group.type].map((app) => (
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          {POPULAR_APPS.map((app) => (
                             <Link
                               key={app.slug}
                               href={`/${app.slug}`}
                               onClick={() => setDrawer(null)}
-                              className="flex items-center gap-2 rounded-xl border border-border glass px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                              className="flex items-center gap-2.5 rounded-xl border border-border/70 bg-surface-2/40 px-3 py-2.5 transition-colors hover:border-primary/40 hover:bg-surface-2"
                             >
-                              <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: app.accent }} aria-hidden />
-                              <span className="truncate">{app.name}</span>
+                              <span
+                                className="grid size-8 shrink-0 place-items-center rounded-lg"
+                                style={{ backgroundColor: `${app.accent}1f`, color: app.accent }}
+                              >
+                                <AppIcon name={app.icon} appKey={app.key} className="size-4" />
+                              </span>
+                              <span className="min-w-0 truncate text-sm font-semibold text-foreground">
+                                {app.name}
+                              </span>
                             </Link>
                           ))}
                         </div>
-                      </div>
-                    );
-                  })}
-                  <Link
-                    href="/fonts"
-                    onClick={() => setDrawer(null)}
-                    className="mt-2 flex items-center justify-center rounded-xl border border-border bg-surface-2/60 px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-surface-2"
-                  >
-                    All fonts &amp; generators
-                  </Link>
+
+                        {recentApps.length > 0 && (
+                          <>
+                            <p className="mt-4 mb-2 text-[10px] font-bold tracking-wider text-muted uppercase">
+                              Continue where you left off
+                            </p>
+                            <div className="grid grid-cols-3 gap-1.5">
+                              {recentApps.map((app) => (
+                                <Link
+                                  key={app.slug}
+                                  href={`/${app.slug}`}
+                                  onClick={() => setDrawer(null)}
+                                  className="flex flex-col items-center gap-1 rounded-xl border border-border/70 bg-surface-2/40 px-2 py-2.5 transition-colors hover:border-primary/40 hover:bg-surface-2"
+                                >
+                                  <span
+                                    className="grid size-8 place-items-center rounded-lg"
+                                    style={{ backgroundColor: `${app.accent}1f`, color: app.accent }}
+                                  >
+                                    <AppIcon name={app.icon} appKey={app.key} className="size-4" />
+                                  </span>
+                                  <span className="w-full truncate text-center text-[11px] font-semibold text-foreground">
+                                    {app.name}
+                                  </span>
+                                  <span className="text-[9px] font-medium text-muted/60">
+                                    Continue
+                                  </span>
+                                </Link>
+                              ))}
+                            </div>
+                          </>
+                        )}
+
+                        <p className="mt-4 mb-2 text-[10px] font-bold tracking-wider text-muted uppercase">
+                          🔥 Trending today
+                        </p>
+                        <div className="no-scrollbar flex gap-1.5 overflow-x-auto pb-1">
+                          {trendingApps.map((app) => (
+                            <Link
+                              key={app.slug}
+                              href={`/${app.slug}`}
+                              onClick={() => setDrawer(null)}
+                              className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-surface-2/50 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-surface-2"
+                            >
+                              <span
+                                className="size-1.5 rounded-full"
+                                style={{ backgroundColor: app.accent }}
+                                aria-hidden
+                              />
+                              {app.name}
+                              <span className="text-[10px] text-muted/60 tabular-nums">
+                                · {activity[app.slug] ?? ""}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setAppsView("all")}
+                          className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-surface-2/70 text-sm font-bold text-foreground transition-colors hover:bg-surface-2"
+                        >
+                          See all apps
+                          <ArrowRight className="size-4" aria-hidden />
+                        </button>
+                        <Link
+                          href="/fonts"
+                          onClick={() => setDrawer(null)}
+                          className="mt-2 flex h-11 items-center justify-center rounded-xl border border-border bg-surface-2/50 text-sm font-semibold text-primary transition-colors hover:bg-surface-2"
+                        >
+                          All fonts &amp; generators
+                        </Link>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="all"
+                        initial={{ opacity: 0, x: 16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 16 }}
+                        transition={{ duration: 0.16 }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setAppsView("home")}
+                          className="mb-4 flex items-center gap-1.5 text-sm font-semibold text-muted transition-colors hover:text-foreground"
+                        >
+                          <ChevronLeft className="size-4" aria-hidden />
+                          Back
+                        </button>
+                        <div className="space-y-3">
+                          {GROUPS.map((group) => {
+                            const Icon = group.icon;
+                            return (
+                              <div key={group.type}>
+                                <p className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-muted uppercase">
+                                  <Icon className="size-3" aria-hidden />
+                                  {group.label}
+                                </p>
+                                <div className="grid grid-cols-2 gap-1.5">
+                                  {APPS_BY_TYPE[group.type].map((app) => (
+                                    <Link
+                                      key={app.slug}
+                                      href={`/${app.slug}`}
+                                      onClick={() => setDrawer(null)}
+                                      className="flex items-center gap-2 rounded-xl border border-border glass px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                                    >
+                                      <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: app.accent }} aria-hidden />
+                                      <span className="truncate">{app.name}</span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <Link
+                          href="/fonts"
+                          onClick={() => setDrawer(null)}
+                          className="mt-4 flex h-11 items-center justify-center rounded-xl border border-border bg-surface-2/60 px-3 text-sm font-semibold text-primary transition-colors hover:bg-surface-2"
+                        >
+                          All fonts &amp; generators
+                        </Link>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ) : (
                 <div className="flex flex-col gap-1.5">

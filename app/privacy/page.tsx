@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import BorderGlow from "@/components/ui/BorderGlow";
 import { PageHeader, Section } from "@/components/layout/PageSection";
 
 export const metadata: Metadata = {
@@ -84,18 +83,7 @@ export default function PrivacyPage() {
           Privacy, <span className="gradient-text">by design</span>
         </h2>
         <div className="mt-10">
-          <BorderGlow
-            animated
-            edgeSensitivity={30}
-            glowColor="139, 92, 246"
-            backgroundColor="color-mix(in srgb, var(--surface) 45%, transparent)"
-            borderRadius={28}
-            glowRadius={40}
-            glowIntensity={2.2}
-            coneSpread={25}
-            colors={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-            className="w-full backdrop-blur-xl"
-          >
+          <div className="w-full overflow-hidden rounded-[28px] border border-border glass">
             <div className="flex flex-col items-center gap-2 px-8 py-10 text-center sm:px-12 sm:py-12">
               <h3 className="text-xl font-black text-foreground sm:text-2xl">
                 Your data, <span className="gradient-text">your rules</span>
@@ -105,7 +93,7 @@ export default function PrivacyPage() {
                 stays exactly where it belongs — on your device.
               </p>
             </div>
-          </BorderGlow>
+          </div>
         </div>
       </section>
     </div>
