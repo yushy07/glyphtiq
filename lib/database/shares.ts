@@ -5,12 +5,18 @@ import { shares } from "./schema";
 
 /** URL-safe-ish alphabet without confusing characters. */
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+const ALPHABET_LENGTH = ALPHABET.length;
+const MAX_UNBIASED_BYTE = Math.floor(256 / ALPHABET_LENGTH) * ALPHABET_LENGTH;
 
 export function generateShareId(length = 8): string {
-  const bytes = randomBytes(length);
   let id = "";
-  for (let i = 0; i < length; i++) {
-    id += ALPHABET[bytes[i] % ALPHABET.length];
+  while (id.length < length) {
+    const bytes = randomBytes(length - id.length);
+    for (let i = 0; i < bytes.length && id.length < length; i++) {
+      const byte = bytes[i];
+      if (byte >= MAX_UNBIASED_BYTE) continue;
+      id += ALPHABET[byte % ALPHABET_LENGTH];
+    }
   }
   return id;
 }
