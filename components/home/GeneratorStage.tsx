@@ -108,6 +108,7 @@ export const GeneratorStage = memo(function GeneratorStage({
           onToggleFavorite={onToggleFavorite}
           onToggleCompare={onToggleCompare}
           onShare={onShare}
+          onInputChange={onChange}
         />
       </div>
     </div>

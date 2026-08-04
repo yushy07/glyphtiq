@@ -363,6 +363,7 @@ export function AppExperience({ app }: { app: AppConfig }) {
           onToggleFavorite={actions.toggleFavorite}
           onToggleCompare={actions.toggleCompare}
           onShare={(r) => void actions.share(r)}
+          onInputChange={(val) => setText(clampText(val, MAX_LENGTH))}
         />
       </div>
 

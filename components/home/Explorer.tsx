@@ -80,6 +80,7 @@ export interface ExplorerProps {
   removeFromComparison: (id: string) => void;
   clearComparison: () => void;
   onInsertSymbol: (symbol: string) => void;
+  onInputChange?: (value: string) => void;
 }
 
 /** The full-library browser: a vertical filter stack (Search → Family →
@@ -104,6 +105,7 @@ export function Explorer({
   removeFromComparison,
   clearComparison,
   onInsertSymbol,
+  onInputChange,
 }: ExplorerProps) {
   const { push } = useToast();
 
@@ -513,6 +515,7 @@ export function Explorer({
           onToggleFavorite={onToggleFavorite}
           onToggleCompare={onToggleCompare}
           onShare={onShare}
+          onInputChange={onInputChange}
         />
 
         {visible.length > PAGE_SIZE && (

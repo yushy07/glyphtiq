@@ -250,6 +250,7 @@ export function HomeExperience() {
           removeFromComparison={actions.removeFromComparison}
           clearComparison={actions.clearComparison}
           onInsertSymbol={insertSymbol}
+          onInputChange={(val) => setText(clampText(val, MAX_LENGTH))}
         />
       </ExplorerStage>
     </div>

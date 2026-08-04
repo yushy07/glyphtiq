@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { SearchX, Sparkles } from "lucide-react";
 import type { CompatibilityResult } from "@/lib/text-engine/compat";
@@ -26,6 +27,7 @@ interface StyleGridProps {
   onToggleCompare: (result: ConvertedResult) => void;
   onShare: (result: ConvertedResult) => void;
   onCardClick?: () => void;
+  onInputChange?: (value: string) => void;
 }
 
 export function StyleGrid({
@@ -45,7 +47,26 @@ export function StyleGrid({
   onToggleCompare,
   onShare,
   onCardClick,
+  onInputChange,
 }: StyleGridProps) {
+  const [selectedStyleId, setSelectedStyleId] = useState<string | null>(null);
+  const [editingStyleId, setEditingStyleId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!editingStyleId) return;
+
+    function handlePointerDown(e: PointerEvent) {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest(`[data-card-id="${editingStyleId}"]`)) {
+        return;
+      }
+      setEditingStyleId(null);
+    }
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    return () => window.removeEventListener("pointerdown", handlePointerDown);
+  }, [editingStyleId]);
+
   if (results.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border glass px-6 py-16 text-center">
@@ -89,6 +110,8 @@ export function StyleGrid({
               isTrending={trendingIds.includes(result.style.id)}
               highlighted={surpriseId === result.style.id}
               spotlight={spotlightId === result.style.id}
+              isSelected={selectedStyleId === result.style.id}
+              isEditing={editingStyleId === result.style.id}
               compat={compatById?.[result.style.id]}
               variants={variantsByCanonical?.[result.style.id]}
               onCopy={onCopy}
@@ -96,6 +119,16 @@ export function StyleGrid({
               onToggleCompare={onToggleCompare}
               onShare={onShare}
               onCardClick={onCardClick}
+              onSelectCard={() => {
+                setSelectedStyleId(result.style.id);
+                setEditingStyleId(null);
+              }}
+              onStartEdit={() => {
+                setSelectedStyleId(result.style.id);
+                setEditingStyleId(result.style.id);
+              }}
+              onEndEdit={() => setEditingStyleId(null)}
+              onInputChange={onInputChange}
             />
           ))}
         </AnimatePresence>

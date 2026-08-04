@@ -36,6 +36,8 @@ interface StyleCardProps {
   highlighted?: boolean;
   /** One-shot glow used by Discovery picks (cleared by the coordinator). */
   spotlight?: boolean;
+  isSelected?: boolean;
+  isEditing?: boolean;
   compat?: CompatibilityResult;
   variants?: ConvertedResult[];
   onCopy: (result: ConvertedResult) => void;
@@ -43,6 +45,10 @@ interface StyleCardProps {
   onToggleCompare: (result: ConvertedResult) => void;
   onShare: (result: ConvertedResult) => void;
   onCardClick?: () => void;
+  onSelectCard?: () => void;
+  onStartEdit?: () => void;
+  onEndEdit?: () => void;
+  onInputChange?: (value: string) => void;
 }
 
 function CopyButton({ result, onCopy, className }: { result: ConvertedResult; onCopy: (result: ConvertedResult) => void; className?: string }) {
@@ -55,7 +61,8 @@ function CopyButton({ result, onCopy, className }: { result: ConvertedResult; on
     };
   }, []);
 
-  function handle() {
+  function handle(e: React.MouseEvent) {
+    e.stopPropagation();
     onCopy(result);
     setJustCopied(true);
     if (timerRef.current !== null) window.clearTimeout(timerRef.current);
@@ -76,9 +83,8 @@ function CopyButton({ result, onCopy, className }: { result: ConvertedResult; on
   );
 }
 
-/** Compact, preview-dominant card: name + preview + Copy are always visible.
- *  Everything else — favorite/share/compare, popularity, platforms, similar
- *  styles — is revealed on hover (desktop) or always visible on touch. */
+const TOUCH_MOVE_THRESHOLD = 8;
+
 export function StyleCard({
   result,
   inputText,
@@ -88,6 +94,8 @@ export function StyleCard({
   isTrending,
   highlighted,
   spotlight,
+  isSelected = false,
+  isEditing = false,
   compat,
   variants = [],
   onCopy,
@@ -95,6 +103,10 @@ export function StyleCard({
   onToggleCompare,
   onShare,
   onCardClick,
+  onSelectCard,
+  onStartEdit,
+  onEndEdit,
+  onInputChange,
 }: StyleCardProps) {
   const [showSimilar, setShowSimilar] = useState(false);
   const { style, text } = result;
@@ -107,38 +119,138 @@ export function StyleCard({
     .filter((n): n is string => !!n)
     .slice(0, 3);
 
+  const cardRef = useRef<HTMLElement>(null);
+  const touchStartPos = useRef<{ x: number; y: number } | null>(null);
+  const isScrollRef = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isSelected && cardRef.current) {
+      cardRef.current.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
+  }, [isSelected]);
+
+  useEffect(() => {
+    if (isEditing) {
+      if (!inputText) {
+        onInputChange?.("Glyphtiq");
+      }
+      const timer = setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select();
+        }
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditing]);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    const touch = e.touches[0];
+    if (touch) {
+      touchStartPos.current = { x: touch.clientX, y: touch.clientY };
+      isScrollRef.current = false;
+    }
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    if (!touchStartPos.current) return;
+    const touch = e.touches[0];
+    if (touch) {
+      const dx = touch.clientX - touchStartPos.current.x;
+      const dy = touch.clientY - touchStartPos.current.y;
+      if (Math.hypot(dx, dy) > TOUCH_MOVE_THRESHOLD) {
+        isScrollRef.current = true;
+      }
+    }
+  }
+
+  function handleTouchEnd() {
+    touchStartPos.current = null;
+  }
+
   function handleCopy() {
     onCopy(result);
     onCardClick?.();
   }
 
+  function handleCardClick(e: React.MouseEvent) {
+    if (isScrollRef.current) {
+      isScrollRef.current = false;
+      return;
+    }
+    const target = e.target as HTMLElement;
+    if (target.closest("button") || target.closest("a") || target.closest("input") || target.closest("textarea")) {
+      return;
+    }
+
+    if (!isSelected) {
+      onSelectCard?.();
+    }
+  }
+
+  function handlePreviewClick(e: React.MouseEvent) {
+    if (isScrollRef.current) {
+      isScrollRef.current = false;
+      return;
+    }
+    e.stopPropagation();
+    if (!isSelected) {
+      onSelectCard?.();
+    } else if (!isEditing) {
+      onStartEdit?.();
+    }
+  }
+
   return (
     <motion.article
+      ref={cardRef}
       layout
       id={`style-${style.id}`}
+      data-card-id={style.id}
+      aria-selected={isSelected}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      onClick={(e) => {
-        const target = e.target as HTMLElement;
-        if (target.closest("button") || target.closest("a")) return;
-        handleCopy();
-      }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onClick={handleCardClick}
       className={cn(
         "group flex cursor-pointer flex-col rounded-2xl border glass p-3.5 shadow-sm transition-all hover:shadow-md",
-        highlighted ? "border-primary ring-2 ring-primary/50" : "border-border hover:border-primary/40",
+        isEditing
+          ? "border-primary ring-2 ring-primary shadow-lg bg-surface-2/30"
+          : isSelected
+          ? "border-primary ring-2 ring-primary/50 shadow-md"
+          : highlighted
+          ? "border-primary ring-2 ring-primary/50"
+          : "border-border hover:border-primary/40",
         spotlight && "spotlight-glow",
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="truncate text-sm font-bold text-foreground">{style.name}</h3>
+        <div className="flex items-center gap-1.5 truncate">
+          <h3 className="truncate text-sm font-bold text-foreground">{style.name}</h3>
+          {isSelected && !isEditing && (
+            <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary uppercase">
+              Selected
+            </span>
+          )}
+        </div>
         <div className="flex shrink-0 items-center gap-0.5 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
           <button
             type="button"
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
             aria-pressed={isFavorite}
-            onClick={() => onToggleFavorite(result)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleFavorite(result);
+            }}
             className="grid size-8 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <Star className={cn("size-4", isFavorite && "fill-amber-400 text-amber-400")} aria-hidden />
@@ -146,7 +258,10 @@ export function StyleCard({
           <button
             type="button"
             aria-label={`Share ${style.name}`}
-            onClick={() => onShare(result)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onShare(result);
+            }}
             className="grid size-8 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <Share2 className="size-4" aria-hidden />
@@ -155,7 +270,10 @@ export function StyleCard({
             type="button"
             aria-label={isCompared ? `Remove ${style.name} from comparison` : `Add ${style.name} to comparison`}
             aria-pressed={isCompared}
-            onClick={() => onToggleCompare(result)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleCompare(result);
+            }}
             className={cn(
               "grid size-8 place-items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
               isCompared ? "bg-primary/15 text-primary" : "text-muted hover:bg-surface-2 hover:text-foreground",
@@ -166,19 +284,54 @@ export function StyleCard({
         </div>
       </div>
 
-      <div
-        className={cn(
-          // No line-clamp / overflow-hidden — Unicode glyphs (Zalgo, diacritics,
-          // combining marks, box-art) must never be cropped.
-          // min-h keeps short previews consistent; the box grows when content is taller.
-          "mt-1.5 min-h-[3.5rem] rounded-lg bg-surface-2 px-3 py-3.5 break-words text-foreground",
-          // Generous line-height so ascenders/descenders and stacked marks have room.
-          "leading-[1.9]",
-          PREVIEW_SIZE_CLASS[previewSize],
-        )}
-      >
-        {preview}
-      </div>
+      {isEditing ? (
+        <div className="mt-1.5 flex flex-col gap-2 rounded-lg bg-surface-2 p-2.5 border border-primary/60 ring-1 ring-primary/30">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-primary flex items-center gap-1 uppercase tracking-wider">
+              Editing inline
+            </span>
+            <span className="text-[10px] text-muted font-medium">
+              Enter to save · Esc to cancel
+            </span>
+          </div>
+          <input
+            ref={inputRef}
+            type="text"
+            value={inputText}
+            onChange={(e) => onInputChange?.(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.nativeEvent.isComposing) return;
+              if (e.key === "Enter" || e.key === "Escape") {
+                e.preventDefault();
+                onEndEdit?.();
+              }
+            }}
+            aria-label="Edit preview text"
+            className="w-full rounded-md border border-border bg-background px-2.5 py-1.5 text-sm font-medium text-foreground placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          <div
+            className={cn(
+              "break-words text-foreground leading-[1.9] pt-1 border-t border-border/40",
+              PREVIEW_SIZE_CLASS[previewSize],
+            )}
+          >
+            {preview}
+          </div>
+        </div>
+      ) : (
+        <div
+          onClick={handlePreviewClick}
+          className={cn(
+            "mt-1.5 min-h-[3.5rem] rounded-lg bg-surface-2 px-3 py-3.5 break-words text-foreground transition-colors",
+            isSelected ? "border border-primary/30 hover:border-primary/60 hover:bg-surface-2/80" : "",
+            "leading-[1.9]",
+            PREVIEW_SIZE_CLASS[previewSize],
+          )}
+          title={isSelected ? "Click to edit text" : "Click card to select"}
+        >
+          {preview}
+        </div>
+      )}
 
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 min-h-[1.5rem] sm:mt-2">
         <span className="text-[11px] font-semibold text-muted">🔥 {meta.popularity} popularity</span>
@@ -208,7 +361,10 @@ export function StyleCard({
           <button
             type="button"
             aria-expanded={showSimilar}
-            onClick={() => setShowSimilar((open) => !open)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowSimilar((open) => !open);
+            }}
             className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border/70 bg-surface-2/40 px-3 py-1.5 text-xs font-bold text-muted transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             {showSimilar ? "Hide similar styles" : "Similar styles →"}
@@ -247,3 +403,4 @@ export function StyleCard({
     </motion.article>
   );
 }
+
