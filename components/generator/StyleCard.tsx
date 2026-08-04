@@ -188,8 +188,9 @@ export function StyleCard({
       return;
     }
 
-    if (!isSelected) {
+    if (!isSelected || !isEditing) {
       onSelectCard?.();
+      onStartEdit?.();
     }
   }
 
@@ -199,9 +200,8 @@ export function StyleCard({
       return;
     }
     e.stopPropagation();
-    if (!isSelected) {
+    if (!isSelected || !isEditing) {
       onSelectCard?.();
-    } else if (!isEditing) {
       onStartEdit?.();
     }
   }
@@ -327,7 +327,7 @@ export function StyleCard({
             "leading-[1.9]",
             PREVIEW_SIZE_CLASS[previewSize],
           )}
-          title={isSelected ? "Click to edit text" : "Click card to select"}
+          title="Click card to edit text"
         >
           {preview}
         </div>

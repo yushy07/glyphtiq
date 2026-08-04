@@ -121,7 +121,7 @@ export function StyleGrid({
               onCardClick={onCardClick}
               onSelectCard={() => {
                 setSelectedStyleId(result.style.id);
-                setEditingStyleId(null);
+                setEditingStyleId(result.style.id);
               }}
               onStartEdit={() => {
                 setSelectedStyleId(result.style.id);
