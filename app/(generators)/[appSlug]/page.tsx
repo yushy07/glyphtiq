@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { APP_CONFIGS, getAppBySlug } from "@/lib/text-engine/apps";
-import { AppGenerator } from "@/components/generator/AppGenerator";
+import { AppExperience } from "@/components/app/AppExperience";
 
 type Props = { params: Promise<{ appSlug: string }> };
 
@@ -24,5 +24,5 @@ export default async function AppGeneratorPage({ params }: Props) {
   const app = getAppBySlug(appSlug);
   if (!app) notFound();
 
-  return <AppGenerator app={app} />;
+  return <AppExperience app={app} />;
 }

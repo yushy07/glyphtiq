@@ -15,7 +15,7 @@ import {
 import { APPS_BY_TYPE } from "@/lib/text-engine/apps";
 import type { AppConfig, AppType } from "@/lib/text-engine/types";
 import { cn } from "@/lib/utils";
-import { AppIcon } from "./AppIcon";
+import { AppIcon } from "@/components/icons/AppIcon";
 import {
   APP_TYPE_LABELS,
   COLLECTIONS,
@@ -110,14 +110,9 @@ function RankedCard({ app, rank, activity }: { app: AppConfig; rank: number; act
       onMouseLeave={() => setHover(false)}
       className="group relative flex flex-col gap-1.5 rounded-2xl border border-transparent p-2.5 transition-all duration-150 hover:-translate-y-0.5 hover:border-border hover:bg-surface-2 hover:shadow-lg hover:shadow-black/25 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
     >
-      <span className="flex items-center gap-2.5">
-        <span
-          className="grid size-9 shrink-0 place-items-center rounded-xl transition-transform duration-150 group-hover:scale-105"
-          style={{ backgroundColor: `${app.accent}1f`, color: app.accent }}
-        >
-          <AppIcon name={app.icon} appKey={app.key} className="size-4" />
-        </span>
-        <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-2.5">
+          <AppIcon app={app} size="md" />
+          <span className="min-w-0 flex-1">
           <span className="block truncate text-[13px] font-semibold text-foreground">
             {app.name}
           </span>
@@ -177,8 +172,13 @@ function RankedCard({ app, rank, activity }: { app: AppConfig; rank: number; act
   );
 }
 
-export function AppsMenu() {
-  const [open, setOpen] = useState(false);
+export function AppsMenu({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const [view, setView] = useState<View>("discover");
   const [pick, setPick] = useState<PickTab>("trending");
   const [filter, setFilter] = useState<FilterTab>("all");
@@ -196,24 +196,22 @@ export function AppsMenu() {
     .slice(0, 3);
 
   const handleToggle = () => {
-    if (open) {
-      setOpen(false);
-      return;
+    if (!open) {
+      setTrendingOrder(shuffledPopular());
+      setActivity(Object.fromEntries(ALL_APPS.map((app) => [app.slug, niceActivityCount()])));
     }
-    setOpen(true);
-    setTrendingOrder(shuffledPopular());
-    setActivity(Object.fromEntries(ALL_APPS.map((app) => [app.slug, niceActivityCount()])));
+    onOpenChange(!open);
   };
 
   useEffect(() => {
     if (!open) return;
     const onClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node)) onOpenChange(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       if (view === "explore") setView("discover");
-      else setOpen(false);
+      else onOpenChange(false);
     };
     document.addEventListener("mousedown", onClick);
     document.addEventListener("keydown", onKey);
@@ -221,7 +219,7 @@ export function AppsMenu() {
       document.removeEventListener("mousedown", onClick);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open, view]);
+  }, [open, view, onOpenChange]);
 
   useEffect(() => {
     if (open && view === "explore") {
@@ -232,6 +230,7 @@ export function AppsMenu() {
 
   useEffect(() => {
     if (open) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset filters whenever the menu closes
     setView("discover");
     setPick("trending");
     setFilter("all");
@@ -266,17 +265,23 @@ export function AppsMenu() {
         aria-expanded={open}
         aria-haspopup="menu"
         onClick={handleToggle}
-        className={cn(
-          "flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-semibold transition-colors focus-visible:outline-none",
-          open ? "text-primary" : "text-muted hover:text-foreground",
-        )}
+        className={cn("rounded-full p-px focus-visible:outline-none", open && "bg-gradient-to-r from-primary/50 via-secondary/50 to-primary/50")}
       >
-        <Grid2x2 className="size-3.5" aria-hidden />
-        <span>Apps</span>
-        <ChevronDown
-          className={cn("size-3.5 transition-transform duration-200", open && "rotate-180")}
-          aria-hidden
-        />
+        <span
+          className={cn(
+            "flex items-center gap-1.5 rounded-full border border-transparent px-3.5 py-1.5 text-[13px] font-semibold transition-colors duration-150",
+            open
+              ? "bg-background text-foreground"
+              : "text-muted hover:border-border/70 hover:bg-surface-2/60 hover:text-foreground",
+          )}
+        >
+          <Grid2x2 className="size-3.5" aria-hidden />
+          <span>Apps</span>
+          <ChevronDown
+            className={cn("size-3.5 transition-transform duration-200", open && "rotate-180")}
+            aria-hidden
+          />
+        </span>
       </button>
 
       <AnimatePresence>
@@ -339,15 +344,10 @@ export function AppsMenu() {
                           <Link
                             key={app.slug}
                             href={`/${app.slug}`}
-                            onClick={() => setOpen(false)}
+                            onClick={() => onOpenChange(false)}
                             className="flex items-center gap-2.5 rounded-xl px-2 py-2 transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
                           >
-                            <span
-                              className="grid size-8 shrink-0 place-items-center rounded-lg"
-                              style={{ backgroundColor: `${app.accent}1f`, color: app.accent }}
-                            >
-                              <AppIcon name={app.icon} appKey={app.key} className="size-4" />
-                            </span>
+                            <AppIcon app={app} size="md" />
                             <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
                               {app.name}
                             </span>
@@ -370,16 +370,11 @@ export function AppsMenu() {
                               <Link
                                 key={app.slug}
                                 href={`/${app.slug}`}
-                                onClick={() => setOpen(false)}
+                                onClick={() => onOpenChange(false)}
                                 className="group flex flex-col items-center gap-1.5 rounded-xl border border-border/60 bg-surface-2/40 px-2 py-2.5 transition-all duration-150 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface-2"
                               >
-                                <span
-                                  className="grid size-7 shrink-0 place-items-center rounded-lg"
-                                  style={{ backgroundColor: `${app.accent}1f`, color: app.accent }}
-                                >
-                                  <AppIcon name={app.icon} appKey={app.key} className="size-3.5" />
-                                </span>
-                                <span className="w-full truncate text-center text-[11px] font-semibold text-foreground">
+                                  <AppIcon app={app} size="md" />
+                                  <span className="w-full truncate text-center text-[11px] font-semibold text-foreground">
                                   {app.name}
                                 </span>
                                 <span className="text-[9px] font-medium text-muted/60">
@@ -458,7 +453,7 @@ export function AppsMenu() {
                             <Link
                               key={collection.id}
                               href={`/${collection.slug}`}
-                              onClick={() => setOpen(false)}
+                              onClick={() => onOpenChange(false)}
                               className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-surface-2/50 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-surface-2"
                             >
                               <span aria-hidden>{collection.emoji}</span>
@@ -481,7 +476,7 @@ export function AppsMenu() {
                     </button>
                     <Link
                       href="/fonts"
-                      onClick={() => setOpen(false)}
+                      onClick={() => onOpenChange(false)}
                       className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl px-3 text-[13px] font-semibold text-primary transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
                     >
                       All fonts
@@ -516,7 +511,7 @@ export function AppsMenu() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => setOpen(false)}
+                      onClick={() => onOpenChange(false)}
                       aria-label="Close menu"
                       className="grid size-8 shrink-0 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
                     >
@@ -578,15 +573,10 @@ export function AppsMenu() {
                               <Link
                                 key={app.slug}
                                 href={`/${app.slug}`}
-                                onClick={() => setOpen(false)}
+                                onClick={() => onOpenChange(false)}
                                 className="flex items-center gap-2.5 rounded-xl px-2 py-2 transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
                               >
-                                <span
-                                  className="grid size-7 shrink-0 place-items-center rounded-lg"
-                                  style={{ backgroundColor: `${app.accent}1f`, color: app.accent }}
-                                >
-                                  <AppIcon name={app.icon} appKey={app.key} className="size-3.5" />
-                                </span>
+                                <AppIcon app={app} size="md" />
                                 <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
                                   {app.name}
                                 </span>
@@ -603,7 +593,7 @@ export function AppsMenu() {
 
                   <Link
                     href="/fonts"
-                    onClick={() => setOpen(false)}
+                    onClick={() => onOpenChange(false)}
                     className="mt-3 flex h-10 items-center justify-center rounded-xl border border-border/70 bg-surface-2/50 text-[13px] font-semibold text-primary transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
                   >
                     All fonts &amp; generators

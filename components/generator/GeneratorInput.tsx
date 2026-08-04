@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Shuffle, Wand2, X } from "lucide-react";
+import { ClipboardPaste, Pencil, Shuffle, Sparkles, Wand2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GeneratorInputProps {
@@ -9,6 +9,8 @@ interface GeneratorInputProps {
   onChange: (value: string) => void;
   onSurprise: () => void;
   onClear: () => void;
+  onPaste?: () => void;
+  onCopyBest?: () => void;
   textareaRef?: React.RefObject<HTMLTextAreaElement | null>;
 }
 
@@ -18,6 +20,8 @@ export function GeneratorInput({
   onChange,
   onSurprise,
   onClear,
+  onPaste,
+  onCopyBest,
   textareaRef,
 }: GeneratorInputProps) {
   const count = Array.from(value).length;
@@ -65,6 +69,32 @@ export function GeneratorInput({
           </p>
         </div>
       </div>
+
+      {/* Quick Actions Row */}
+      {(onPaste || onCopyBest) && (
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          {onPaste && (
+            <button
+              type="button"
+              onClick={onPaste}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-surface/60 px-3.5 py-1.5 text-xs font-bold text-foreground/90 backdrop-blur-sm transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              <ClipboardPaste className="size-3.5" aria-hidden />
+              Paste
+            </button>
+          )}
+          {onCopyBest && (
+            <button
+              type="button"
+              onClick={onCopyBest}
+              className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/15 px-3.5 py-1.5 text-xs font-bold text-primary transition-all hover:bg-primary/25 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              <Sparkles className="size-3.5" aria-hidden />
+              Copy best style
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Your Styles Header Row */}
       <div className="flex items-center justify-between gap-2 pt-1">

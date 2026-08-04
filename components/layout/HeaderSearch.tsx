@@ -4,16 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Gamepad2, Search, Sparkles, X } from "lucide-react";
+import { ArrowRight, Search, Sparkles, X } from "lucide-react";
 import { searchStyles } from "@/lib/text-engine/engine";
 import { APP_CONFIGS } from "@/lib/text-engine/apps";
 import type { TextStyle } from "@/lib/text-engine/types";
+import { cn } from "@/lib/utils";
+import { AppIcon } from "@/components/icons/AppIcon";
 
-export function HeaderSearch() {
+export function HeaderSearch({
+  variant = "desktop",
+  autoFocus = false,
+}: {
+  variant?: "desktop" | "mobile";
+  autoFocus?: boolean;
+}) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const isMobile = variant === "mobile";
 
   const trimmed = query.trim().toLowerCase();
 
@@ -46,7 +56,7 @@ export function HeaderSearch() {
   const hasResults = appMatches.length > 0 || styleMatches.length > 0;
 
   return (
-    <div ref={ref} className="relative hidden sm:block">
+    <div ref={ref} className={cn("relative", isMobile ? "w-full" : "hidden md:block")}>
       <div className="relative">
         <Search
           aria-hidden
@@ -56,8 +66,9 @@ export function HeaderSearch() {
           type="search"
           inputMode="search"
           autoComplete="off"
-          placeholder="Search fonts, apps..."
+          placeholder="Search fonts or apps..."
           value={query}
+          autoFocus={autoFocus}
           onFocus={() => setOpen(true)}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -71,7 +82,12 @@ export function HeaderSearch() {
             }
           }}
           aria-label="Search fonts and apps"
-          className="h-9 w-44 sm:w-52 md:w-56 rounded-full border border-border/80 bg-surface/60 backdrop-blur-md pl-9 pr-8 text-xs text-foreground placeholder:text-muted/70 focus-visible:outline-none focus-visible:border-primary/50 transition-all"
+          className={cn(
+            "rounded-full border border-border/80 bg-surface/60 backdrop-blur-md pl-9 pr-8 text-xs text-foreground placeholder:text-muted/70 transition-all focus-visible:border-primary/50 focus-visible:outline-none",
+            isMobile
+              ? "h-10 w-full"
+              : "h-9 w-24 focus:w-40 md:w-28 md:focus:w-48",
+          )}
         />
         {query && (
           <button
@@ -118,7 +134,7 @@ export function HeaderSearch() {
                     }}
                     className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface-2"
                   >
-                    <Gamepad2 className="size-4 text-muted" aria-hidden />
+                    <AppIcon app={app} size="md" />
                     <span className="flex-1 truncate">{app.name}</span>
                     <ArrowRight className="size-3.5 text-muted" aria-hidden />
                   </Link>

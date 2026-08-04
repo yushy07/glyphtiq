@@ -86,7 +86,6 @@ export interface AppConfig {
   title: string;
   description: string;
   accent: string;
-  icon: string;
   type: AppType;
   defaultCategory: StyleCategory | "all";
   useCases: string[];

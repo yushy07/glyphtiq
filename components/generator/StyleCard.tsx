@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, ChevronDown, Copy, Plus, Share2, Star } from "lucide-react";
+import { Check, Copy, Plus, Share2, Star } from "lucide-react";
 import type { CompatibilityLevel, CompatibilityResult } from "@/lib/text-engine/compat";
 import { resolveStyleMetadata } from "@/lib/text-engine/quality";
+import { getAppByKey } from "@/lib/text-engine/apps";
 import type { ConvertedResult } from "@/lib/text-engine/types";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -12,9 +13,9 @@ import { cn } from "@/lib/utils";
 export type PreviewSize = "sm" | "md" | "lg";
 
 const PREVIEW_SIZE_CLASS: Record<PreviewSize, string> = {
-  sm: "text-sm",
-  md: "text-base",
-  lg: "text-lg",
+  sm: "text-base",
+  md: "text-lg",
+  lg: "text-xl",
 };
 
 const COMPAT_STYLES: Record<CompatibilityLevel, string> = {
@@ -33,6 +34,8 @@ interface StyleCardProps {
   isCompared: boolean;
   isTrending?: boolean;
   highlighted?: boolean;
+  /** One-shot glow used by Discovery picks (cleared by the coordinator). */
+  spotlight?: boolean;
   compat?: CompatibilityResult;
   variants?: ConvertedResult[];
   onCopy: (result: ConvertedResult) => void;
@@ -73,6 +76,9 @@ function CopyButton({ result, onCopy, className }: { result: ConvertedResult; on
   );
 }
 
+/** Compact, preview-dominant card: name + preview + Copy are always visible.
+ *  Everything else — favorite/share/compare, popularity, platforms, similar
+ *  styles — is revealed on hover (desktop) or always visible on touch. */
 export function StyleCard({
   result,
   inputText,
@@ -81,6 +87,7 @@ export function StyleCard({
   isCompared,
   isTrending,
   highlighted,
+  spotlight,
   compat,
   variants = [],
   onCopy,
@@ -94,6 +101,11 @@ export function StyleCard({
   const meta = resolveStyleMetadata(style);
 
   const preview = inputText ? text : style.convert("Glyphy");
+
+  const platforms = meta.recommendedPlatforms
+    .map((p) => getAppByKey(p)?.name)
+    .filter((n): n is string => !!n)
+    .slice(0, 3);
 
   function handleCopy() {
     onCopy(result);
@@ -114,40 +126,20 @@ export function StyleCard({
         handleCopy();
       }}
       className={cn(
-        "group flex cursor-pointer flex-col rounded-2xl border glass p-5 shadow-sm transition-shadow hover:shadow-md",
-        highlighted ? "border-primary ring-2 ring-primary/50" : "border-border",
+        "group flex cursor-pointer flex-col rounded-2xl border glass p-3.5 shadow-sm transition-all hover:shadow-md",
+        highlighted ? "border-primary ring-2 ring-primary/50" : "border-border hover:border-primary/40",
+        spotlight && "spotlight-glow",
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
-          <h3 className="text-sm leading-snug font-bold text-foreground">{style.name}</h3>
-          <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-bold tracking-wide text-primary uppercase">
-            {style.category}
-          </span>
-          {isTrending && (
-            <span className="rounded-full bg-secondary/10 px-2 py-0.5 text-[10px] font-bold tracking-wide text-secondary uppercase">
-              🔥 Trending
-            </span>
-          )}
-          {compat && (
-            <span
-              className={cn(
-                "rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wide uppercase",
-                COMPAT_STYLES[compat.level],
-              )}
-              title={`Compatibility score ${compat.score}/100`}
-            >
-              {compat.label}
-            </span>
-          )}
-        </div>
-        <div className="flex shrink-0 items-center gap-0.5">
+        <h3 className="truncate text-sm font-bold text-foreground">{style.name}</h3>
+        <div className="flex shrink-0 items-center gap-0.5 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
           <button
             type="button"
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
             aria-pressed={isFavorite}
             onClick={() => onToggleFavorite(result)}
-            className="grid size-9 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="grid size-8 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <Star className={cn("size-4", isFavorite && "fill-amber-400 text-amber-400")} aria-hidden />
           </button>
@@ -155,7 +147,7 @@ export function StyleCard({
             type="button"
             aria-label={`Share ${style.name}`}
             onClick={() => onShare(result)}
-            className="grid size-9 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="grid size-8 place-items-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <Share2 className="size-4" aria-hidden />
           </button>
@@ -165,7 +157,7 @@ export function StyleCard({
             aria-pressed={isCompared}
             onClick={() => onToggleCompare(result)}
             className={cn(
-              "grid size-9 place-items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+              "grid size-8 place-items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
               isCompared ? "bg-primary/15 text-primary" : "text-muted hover:bg-surface-2 hover:text-foreground",
             )}
           >
@@ -176,40 +168,45 @@ export function StyleCard({
 
       <div
         className={cn(
-          "mt-3 max-h-36 min-h-12 overflow-y-auto rounded-xl bg-surface-2 p-3",
+          "mt-1.5 line-clamp-3 rounded-lg bg-surface-2 p-3 leading-relaxed break-words text-foreground",
           PREVIEW_SIZE_CLASS[previewSize],
         )}
       >
-        <p className="break-words leading-relaxed whitespace-pre-wrap text-foreground">{preview}</p>
+        {preview}
       </div>
 
-      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-        {[
-          { label: "Readability", value: meta.readability },
-          { label: "Uniqueness", value: meta.uniqueness },
-          { label: "Popularity", value: meta.popularity },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            title={`${stat.label} score ${stat.value}/100`}
-            className="rounded-lg border border-border/60 bg-surface-2/50 px-1 py-1.5 opacity-70 transition-opacity group-hover:opacity-100"
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 sm:mt-0 sm:max-h-0 sm:opacity-0 sm:transition-all sm:duration-300 sm:group-hover:mt-2 sm:group-hover:max-h-12 sm:group-hover:opacity-100">
+        <span className="text-[11px] font-semibold text-muted">🔥 {meta.popularity} popularity</span>
+        {platforms.length > 0 && (
+          <span className="text-[11px] font-semibold text-muted">Works on {platforms.join(", ")}</span>
+        )}
+        {isTrending && (
+          <span className="rounded-full bg-secondary/10 px-1.5 py-0.5 text-[10px] font-bold tracking-wide text-secondary uppercase">
+            🔥 Trending
+          </span>
+        )}
+        {compat && (
+          <span
+            className={cn(
+              "rounded-full border px-1.5 py-0.5 text-[10px] font-bold tracking-wide uppercase",
+              COMPAT_STYLES[compat.level],
+            )}
+            title={`Compatibility score ${compat.score}/100`}
           >
-            <div className="text-sm font-bold tabular-nums text-foreground">{stat.value}</div>
-            <div className="text-[9px] font-semibold tracking-wide text-muted uppercase">{stat.label}</div>
-          </div>
-        ))}
+            {compat.label}
+          </span>
+        )}
       </div>
 
       {variants.length > 0 && (
-        <div className="mt-3">
+        <div className="mt-2">
           <button
             type="button"
             aria-expanded={showSimilar}
             onClick={() => setShowSimilar((open) => !open)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-border/70 bg-surface-2/40 px-3 py-2 text-xs font-bold text-muted transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border/70 bg-surface-2/40 px-3 py-1.5 text-xs font-bold text-muted transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <ChevronDown className={cn("size-3.5 transition-transform", showSimilar && "rotate-180")} aria-hidden />
-            {showSimilar ? "Hide" : "Similar styles"}
+            {showSimilar ? "Hide similar styles" : "Similar styles →"}
             <span className="rounded-full bg-surface-2 px-1.5 text-[10px] font-semibold text-muted">{variants.length}</span>
           </button>
           <AnimatePresence initial={false}>
@@ -239,7 +236,7 @@ export function StyleCard({
         </div>
       )}
 
-      <div className="mt-3">
+      <div className="mt-2">
         <CopyButton result={result} onCopy={handleCopy} />
       </div>
     </motion.article>

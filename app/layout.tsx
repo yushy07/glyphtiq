@@ -3,7 +3,6 @@ import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { MobileNav } from "@/components/layout/MobileNav";
 import { ToastProvider } from "@/components/ui/Toast";
 import ClickSpark from "@/components/ui/ClickSpark";
 import FloatingLines from "@/components/ui/FloatingLines";
@@ -59,16 +58,16 @@ export default function RootLayout({
             <FloatingLines
               linesGradient={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
               enabledWaves={["top", "middle", "bottom"]}
-              lineCount={[10, 15, 20]}
+              lineCount={[6, 9, 12]}
               lineDistance={21.5}
               bendRadius={6}
               bendStrength={-1.5}
-              animationSpeed={3.2}
+              animationSpeed={0.8}
               parallax
-              parallaxStrength={0.2}
+              parallaxStrength={0.12}
               interactive
               mixBlendMode="screen"
-              style={{ position: "fixed", inset: 0, zIndex: -1 }}
+              style={{ position: "fixed", inset: 0, zIndex: -1, opacity: 0.6 }}
             />
             <ClickSpark
               sparkColor="#a78bfa"
@@ -81,7 +80,6 @@ export default function RootLayout({
                 <Header />
                 <div className="flex-1">{children}</div>
                 <Footer />
-                <MobileNav />
               </div>
             </ClickSpark>
           </ToastProvider>

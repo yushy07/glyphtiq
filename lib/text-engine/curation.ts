@@ -35,6 +35,10 @@ const TARGET_COLLECTION = 60;
 const SOFT_MAX = 80;
 const CONFIDENCE_FLOOR = 70;
 const SCORE_FLOOR = 40;
+/** Discovery shelves never render fewer than 6 cards — thin shelves look
+ *  unfinished. Sections are padded from the same curated pool when needed. */
+const SECTION_MIN = 6;
+const SECTION_MAX = 8;
 
 const DEFAULT_CORE: Record<AppType, string[]> = {
   social: [
@@ -239,6 +243,13 @@ function personaFor(appKey: PlatformKey, type: AppType): AppPersona {
   };
 }
 
+/** The persona core style ids for an app, in order. Exposed so the UI can
+ *  show the signature set as its "Best styles" before the score fill. */
+export function personaCoreFor(appKey: PlatformKey): string[] {
+  const app = getAppByKey(appKey);
+  return personaFor(appKey, app?.type ?? "gaming").core;
+}
+
 interface RankedStyle {
   style: TextStyle;
   score: number;
@@ -341,7 +352,7 @@ export function curatedForApp(appKey: PlatformKey): TextStyle[] {
 
 /** Renders a section: explicit ids win, otherwise best-of-family. */
 function resolveSection(cfg: AppSectionConfig, curated: TextStyle[]): TextStyle[] {
-  const count = cfg.count ?? 7;
+  const count = Math.min(cfg.count ?? 7, SECTION_MAX);
   if (cfg.styleIds) {
     const ids = new Set(cfg.styleIds);
     const explicit = curated.filter((s) => ids.has(s.id));
@@ -354,6 +365,23 @@ function resolveSection(cfg: AppSectionConfig, curated: TextStyle[]): TextStyle[
     return pool.slice(0, count);
   }
   return [];
+}
+
+/** Pads a shelf to `SECTION_MIN` from the same curated pool, best-first, so
+ *  every shelf renders a full row without inventing styles outside the app's
+ *  Best set (the scroll-to-card target must always exist). */
+function padSection(styles: TextStyle[], curated: TextStyle[], appKey: PlatformKey): TextStyle[] {
+  if (styles.length >= SECTION_MIN) return styles.slice(0, SECTION_MAX);
+  const seen = new Set(styles.map((s) => s.id));
+  const rest = [...curated]
+    .filter((s) => !seen.has(s.id))
+    .sort((a, b) => overallScore(b, appKey) - overallScore(a, appKey));
+  const padded = [...styles];
+  for (const s of rest) {
+    if (padded.length >= SECTION_MIN) break;
+    padded.push(s);
+  }
+  return padded;
 }
 
 /** Per-app intent sections. The Trending section leads and is data-aware. */
@@ -380,10 +408,14 @@ export function getAppSections(
       if (trending.length >= 6) break;
     }
   }
-  sections.push({ emoji: "🔥", label: "Trending", styles: trending });
+  sections.push({ emoji: "🔥", label: "Trending", styles: padSection(trending, curated, appKey) });
 
   for (const cfg of persona.sections) {
-    sections.push({ emoji: cfg.emoji, label: cfg.label, styles: resolveSection(cfg, curated) });
+    sections.push({
+      emoji: cfg.emoji,
+      label: cfg.label,
+      styles: padSection(resolveSection(cfg, curated), curated, appKey),
+    });
   }
   return sections;
 }

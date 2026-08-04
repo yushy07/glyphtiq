@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { Globe, Grid2x2, Lock, ShieldCheck, Sparkles, Wand2, Zap } from "lucide-react";
-import { Generator } from "@/components/generator/Generator";
+import { Globe, Lock, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { HomeExperience } from "@/components/home/HomeExperience";
 import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
 
 const QUICK_FACTS = [
@@ -50,71 +50,37 @@ const WHY_FEATURES = [
 export default function HomePage() {
   return (
     <div className="overflow-x-clip">
-      <section
-        aria-label="Hero"
-        className="relative flex flex-col items-center justify-center overflow-hidden py-10 sm:py-14"
-      >
-        <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 px-4 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-surface/70 px-3.5 py-1 text-[11px] font-bold tracking-widest text-primary uppercase backdrop-blur-sm shadow-sm">
-            <Sparkles className="size-3" aria-hidden />
-            Glyphy · Fancy text, locally
-          </span>
-          <h1 className="text-4xl font-black tracking-tight text-foreground sm:text-6xl max-w-3xl">
-            Make your words <span className="gradient-text">flow</span>
-          </h1>
-          <p className="max-w-xl text-sm leading-relaxed text-foreground/80 sm:text-base">
-            Turn plain text into {STYLE_COUNT_LABEL} unicode styles — bold, cursive, gothic,
-            bubble and more. Everything converts right in your browser, over a
-            living liquid canvas.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <a
-              href="#generator"
-              className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/30 transition-transform hover:scale-[1.03]"
-            >
-              <Wand2 className="size-4" aria-hidden />
-              Start creating
-            </a>
-            <a
-              href="#generator"
-              className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-6 py-3 text-sm font-bold text-foreground/90 backdrop-blur-sm transition-all hover:border-primary/40 hover:bg-surface-2/80 hover:text-foreground hover:scale-[1.03]"
-            >
-              <Grid2x2 className="size-4 text-muted" aria-hidden />
-              Explore styles
-            </a>
-          </div>
-
-          {/* Quick-Facts Row */}
-          <div className="mx-auto mt-8 grid w-full max-w-5xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {QUICK_FACTS.map((fact) => (
-              <div
-                key={fact.title}
-                className="flex items-center gap-3 rounded-2xl border border-border/40 bg-surface/30 p-3.5 backdrop-blur-md transition-all hover:border-primary/30 hover:bg-surface/50"
-              >
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary shadow-sm shadow-primary/10">
-                  <fact.icon className="size-5" aria-hidden />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-xs sm:text-sm font-bold tracking-tight text-foreground">
-                    {fact.title}
-                  </h3>
-                  <p className="text-[11px] sm:text-xs text-muted/80 leading-snug mt-0.5">
-                    {fact.subtitle}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <div id="generator" className="scroll-mt-16">
         <Suspense>
-          <Generator />
+          <HomeExperience />
         </Suspense>
       </div>
 
-      <section id="why" className="mx-auto w-full max-w-6xl scroll-mt-16 px-4 pb-20 pt-8 sm:pb-24">
+      {/* Quick facts — supporting content below the generator flow */}
+      <section aria-label="Highlights" className="mx-auto w-full max-w-5xl px-4 pt-12 pb-4 sm:pt-16">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {QUICK_FACTS.map((fact) => (
+            <div
+              key={fact.title}
+              className="flex items-center gap-3 rounded-2xl border border-border/40 bg-surface/30 p-3.5 backdrop-blur-md transition-all hover:border-primary/30 hover:bg-surface/50"
+            >
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary shadow-sm shadow-primary/10">
+                <fact.icon className="size-5" aria-hidden />
+              </div>
+              <div className="text-left">
+                <h3 className="text-xs sm:text-sm font-bold tracking-tight text-foreground">
+                  {fact.title}
+                </h3>
+                <p className="mt-0.5 text-[11px] leading-snug text-muted/80 sm:text-xs">
+                  {fact.subtitle}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="why" className="mx-auto w-full max-w-6xl scroll-mt-16 px-4 pt-12 pb-20 sm:pt-16 sm:pb-24">
         <h2 className="text-center text-2xl font-black tracking-tight text-foreground sm:text-3xl">
           Why <span className="gradient-text">Glyphy</span>
         </h2>

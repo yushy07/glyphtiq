@@ -4,16 +4,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SearchX, Sparkles } from "lucide-react";
 import type { CompatibilityResult } from "@/lib/text-engine/compat";
 import type { ConvertedResult } from "@/lib/text-engine/types";
+import { cn } from "@/lib/utils";
 import { StyleCard, type PreviewSize } from "./StyleCard";
+
+export type GridDensity = "cozy" | "compact";
 
 interface StyleGridProps {
   results: ConvertedResult[];
   inputText: string;
   previewSize: PreviewSize;
+  density?: GridDensity;
   favorites: string[];
   comparedIds: string[];
   trendingIds: string[];
   surpriseId: string | null;
+  spotlightId?: string | null;
   compatById?: Record<string, CompatibilityResult>;
   variantsByCanonical?: Record<string, ConvertedResult[]>;
   onCopy: (result: ConvertedResult) => void;
@@ -27,10 +32,12 @@ export function StyleGrid({
   results,
   inputText,
   previewSize,
+  density = "cozy",
   favorites,
   comparedIds,
   trendingIds,
   surpriseId,
+  spotlightId,
   compatById,
   variantsByCanonical,
   onCopy,
@@ -61,7 +68,15 @@ export function StyleGrid({
           Previewing sample text — start typing above to convert your own words.
         </p>
       )}
-      <motion.div layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        layout
+        className={cn(
+          "grid",
+          density === "compact"
+            ? "gap-3 sm:grid-cols-2 lg:grid-cols-4"
+            : "gap-4 sm:grid-cols-2 lg:grid-cols-3",
+        )}
+      >
         <AnimatePresence mode="popLayout">
           {results.map((result) => (
             <StyleCard
@@ -73,6 +88,7 @@ export function StyleGrid({
               isCompared={comparedIds.includes(result.style.id)}
               isTrending={trendingIds.includes(result.style.id)}
               highlighted={surpriseId === result.style.id}
+              spotlight={spotlightId === result.style.id}
               compat={compatById?.[result.style.id]}
               variants={variantsByCanonical?.[result.style.id]}
               onCopy={onCopy}

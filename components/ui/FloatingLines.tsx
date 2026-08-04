@@ -286,6 +286,9 @@ const FloatingLines = ({
   const currentInfluenceRef = useRef(0);
   const targetParallaxRef = useRef(new Vector2(0, 0));
   const currentParallaxRef = useRef(new Vector2(0, 0));
+  // The background pauses while typing (generator focus) or whenever the user
+  // prefers reduced motion — atmosphere, not competition.
+  const pausedRef = useRef(false);
 
   const getLineCount = (waveType: Wave) => {
     if (typeof lineCount === "number") return lineCount;
@@ -448,9 +451,33 @@ const FloatingLines = ({
       doc.addEventListener("mouseleave", handlePointerLeave);
     }
 
+    const updatePaused = () => {
+      const reduced =
+        typeof window.matchMedia !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const el = document.activeElement as HTMLElement | null;
+      const generatorFocused =
+        el != null &&
+        (el.tagName === "TEXTAREA" || el.tagName === "INPUT" || el.closest("[data-generator]") != null);
+      pausedRef.current = reduced || generatorFocused;
+    };
+    updatePaused();
+    const mq =
+      typeof window.matchMedia !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)")
+        : null;
+    doc.addEventListener("focusin", updatePaused);
+    doc.addEventListener("focusout", updatePaused);
+    mq?.addEventListener?.("change", updatePaused);
+
     let raf = 0;
     const renderLoop = () => {
       if (!active) return;
+
+      if (pausedRef.current) {
+        raf = requestAnimationFrame(renderLoop);
+        return;
+      }
 
       uniforms.iTime.value = clock.getElapsedTime();
 
@@ -483,6 +510,9 @@ const FloatingLines = ({
         doc.removeEventListener("pointermove", handlePointerMove);
         doc.removeEventListener("mouseleave", handlePointerLeave);
       }
+      doc.removeEventListener("focusin", updatePaused);
+      doc.removeEventListener("focusout", updatePaused);
+      mq?.removeEventListener?.("change", updatePaused);
 
       geometry.dispose();
       material.dispose();

@@ -161,12 +161,25 @@ export function searchStyles(
     if (category !== "all" && s.category !== category) return false;
     if (family !== "all" && !resolveStyleMetadata(s).families.includes(family)) return false;
     if (!q) return true;
+    const meta = resolveStyleMetadata(s);
+    // Family and platform terms only match on longer queries so single-letter
+    // keystrokes don't flood results with entire families.
+    const longQuery = q.length >= 2;
+    const matchesFamily =
+      longQuery &&
+      meta.families.some(
+        (f) => f.includes(q) || (FAMILY_LABELS[f] ?? f).toLowerCase().includes(q),
+      );
+    const matchesPlatform =
+      longQuery && meta.recommendedPlatforms.some((p) => p.toLowerCase().includes(q));
     return (
       s.name.toLowerCase().includes(q) ||
       s.id.toLowerCase().includes(q) ||
       s.category.includes(q) ||
       s.tags.some((t) => t.includes(q)) ||
-      s.description.toLowerCase().includes(q)
+      s.description.toLowerCase().includes(q) ||
+      matchesFamily ||
+      matchesPlatform
     );
   });
 }

@@ -9,13 +9,13 @@ test.describe("Glyphy generator", () => {
     await expect(page.getByRole("heading", { name: /make your words flow/i })).toBeVisible();
     const input = page.getByLabel("Text to convert");
     await input.fill("Hello");
-    await expect(page.getByText("𝐇𝐞𝐥𝐥𝐨", { exact: true })).toBeVisible();
+    await expect(page.locator("#style-bold").getByText("𝐇𝐞𝐥𝐥𝐨", { exact: true })).toBeVisible();
   });
 
   test("supports emoji-safe conversion", async ({ page }) => {
     const input = page.getByLabel("Text to convert");
     await input.fill("hi 👋");
-    await expect(page.getByText("𝐡𝐢 👋", { exact: true })).toBeVisible();
+    await expect(page.locator("#style-bold").getByText("𝐡𝐢 👋", { exact: true })).toBeVisible();
   });
 
   test("counts characters and enforces the limit", async ({ page }) => {
@@ -32,10 +32,18 @@ test.describe("Glyphy generator", () => {
     await expect(page.getByText(/Copied Bold/)).toBeVisible();
   });
 
-  test("searches styles by name", async ({ page }) => {
-    await page.getByPlaceholder("Search styles, categories, tags…").fill("zalgo");
-    await expect(page.getByRole("heading", { name: "Zalgo", exact: true })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Bold", exact: true })).toBeHidden();
+  test("searches styles inside the explorer", async ({ page }) => {
+    await page.getByRole("button", { name: /explore library/i }).click();
+    const explorer = page.getByRole("region", { name: "Explorer" });
+    await expect(explorer.getByPlaceholder("Search styles, categories, tags…")).toBeVisible();
+    await explorer.getByPlaceholder("Search styles, categories, tags…").fill("zalgo");
+    await expect(explorer.getByRole("heading", { name: "Zalgo", exact: true })).toBeVisible();
+    await expect(explorer.getByRole("heading", { name: "Bold", exact: true })).toBeHidden();
+  });
+
+  test("gates the full library behind the explorer", async ({ page }) => {
+    await expect(page.getByRole("button", { name: /explore library/i })).toBeVisible();
+    await expect(page.getByPlaceholder("Search styles, categories, tags…")).toBeHidden();
   });
 
   test("favorites a style and it pins to the top", async ({ page }) => {

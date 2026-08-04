@@ -7,12 +7,6 @@ import { cn } from "@/lib/utils";
 
 export type CategoryFilterValue = StyleCategory | "all";
 
-interface CategoryFilterProps {
-  value: CategoryFilterValue;
-  onChange: (value: CategoryFilterValue) => void;
-  counts?: Partial<Record<StyleCategory, number>>;
-}
-
 const LABELS: Record<CategoryFilterValue, string> = {
   all: "All",
   bold: "Bold",
@@ -32,6 +26,9 @@ const LABELS: Record<CategoryFilterValue, string> = {
   symbol: "Symbol",
   decorated: "Decorated",
 };
+
+/** Every category as a filter value, starting with "all". */
+export const CATEGORY_OPTIONS: CategoryFilterValue[] = ["all", ...CATEGORIES];
 
 export function CategoryPill({
   value,
@@ -76,31 +73,5 @@ export function CategoryPill({
         )}
       </span>
     </button>
-  );
-}
-
-export function CategoryFilter({
-  value,
-  onChange,
-  counts,
-}: CategoryFilterProps) {
-  const options: CategoryFilterValue[] = ["all", ...CATEGORIES];
-
-  return (
-    <div
-      role="tablist"
-      aria-label="Style categories"
-      className="no-scrollbar flex w-full gap-2 overflow-x-auto px-4 pb-1 sm:flex-wrap sm:overflow-visible sm:px-0"
-    >
-      {options.map((option) => (
-        <CategoryPill
-          key={option}
-          value={option}
-          active={value === option}
-          onClick={() => onChange(option)}
-          count={option !== "all" ? counts?.[option] : undefined}
-        />
-      ))}
-    </div>
   );
 }
