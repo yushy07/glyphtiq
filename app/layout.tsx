@@ -7,14 +7,13 @@ import { Footer } from "@/components/layout/Footer";
 import { ToastProvider } from "@/components/ui/Toast";
 import { BackgroundEffects } from "@/components/layout/BackgroundEffects";
 import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
+import { SITE_URL } from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
 });
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphtiq.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

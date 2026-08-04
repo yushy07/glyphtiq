@@ -3,12 +3,13 @@ import Link from "next/link";
 import { Clock, Github } from "lucide-react";
 import { PageHeader, Section } from "@/components/layout/PageSection";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Say hello — feedback, bugs, ideas or just a weird thing you made with Glyphtiq.",
-};
+export const metadata: Metadata = constructMetadata({
+  title: "Contact — Glyphtiq",
+  description: "Say hello — feedback, bugs, ideas or just a weird thing you made with Glyphtiq.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

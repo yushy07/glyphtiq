@@ -5,6 +5,8 @@ import { SYMBOL_CATEGORY_LIST, getSymbolCategoryBySlug } from "@/lib/symbols/cat
 import { getSymbolsByCategory } from "@/lib/symbols/data";
 import { CategoryExplorerClient } from "../CategoryExplorerClient";
 
+import { constructMetadata } from "@/lib/seo";
+
 interface Props {
   params: Promise<{ category: string; subcategory: string }>;
 }
@@ -25,13 +27,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const subcategory = category?.subcategories.find((s) => s.slug === subSlug);
 
   if (!category || !subcategory) {
-    return { title: "Subcategory Not Found — Glyphtiq" };
+    return constructMetadata({ title: "Subcategory Not Found — Glyphtiq", noIndex: true });
   }
 
-  return {
-    title: `${subcategory.name} — Copy ${category.name} Symbols | Glyphtiq`,
+  return constructMetadata({
+    title: `${subcategory.name} — Copy ${category.name} Symbols — Glyphtiq`,
     description: `Browse and copy ${subcategory.name} (${category.name}). ${subcategory.description} Instant copy for Instagram, Discord, and messaging.`,
-  };
+    path: `/symbols/${category.slug}/${subcategory.slug}`,
+    keywords: [subcategory.name.toLowerCase(), `${subcategory.name.toLowerCase()} symbols`, category.name.toLowerCase()],
+  });
 }
 
 export default async function SubcategoryPage({ params }: Props) {

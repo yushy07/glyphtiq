@@ -8,6 +8,8 @@ import {
 import { getKaomojisByCategory } from "@/lib/kaomoji/data";
 import { CategoryKaomojiClient } from "./CategoryKaomojiClient";
 
+import { constructMetadata } from "@/lib/seo";
+
 interface Props {
   params: Promise<{ category: string }>;
 }
@@ -23,15 +25,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = getKaomojiCategoryBySlug(slug);
 
   if (!category) {
-    return { title: "Category Not Found — Glyphtiq" };
+    return constructMetadata({ title: "Category Not Found — Glyphtiq", noIndex: true });
   }
 
   const items = getKaomojisByCategory(category.key);
 
-  return {
-    title: `${category.name} Kaomoji (${items.length}) — Copy Japanese Text Faces | Glyphtiq`,
+  return constructMetadata({
+    title: `${category.name} Kaomoji (${items.length}) — Copy Japanese Text Faces — Glyphtiq`,
     description: `Browse and copy ${items.length} ${category.name} kaomojis & emoticons. ${category.description} Click to copy instantly for Instagram, Discord, or text chat.`,
-  };
+    path: `/kaomojis/${category.slug}`,
+    keywords: [category.name.toLowerCase(), `${category.name.toLowerCase()} kaomoji`, "japanese text faces", "emoticons"],
+  });
 }
 
 export default async function KaomojiCategoryPage({ params }: Props) {

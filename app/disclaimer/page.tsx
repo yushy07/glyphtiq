@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { PageHeader, Section } from "@/components/layout/PageSection";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Disclaimer",
-  description:
-    "The fine print for Glyphtiq — what the fancy text tool does and doesn't promise.",
-};
+export const metadata: Metadata = constructMetadata({
+  title: "Disclaimer — Glyphtiq",
+  description: "The fine print for Glyphtiq — what the fancy text tool does and doesn't promise.",
+  path: "/disclaimer",
+});
 
 export default function DisclaimerPage() {
   return (

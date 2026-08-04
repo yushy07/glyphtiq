@@ -6,6 +6,8 @@ import { getKaomojiBySlug, kaomojis } from "@/lib/kaomoji/data";
 import { getRelatedKaomojis } from "@/lib/kaomoji/related";
 import { KaomojiDetailClient } from "./KaomojiDetailClient";
 
+import { constructMetadata, getDefinedTermJsonLd } from "@/lib/seo";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -21,15 +23,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const item = getKaomojiBySlug(slug);
 
   if (!item) {
-    return { title: "Kaomoji Not Found — Glyphtiq" };
+    return constructMetadata({ title: "Kaomoji Not Found — Glyphtiq", noIndex: true });
   }
 
   const category = getKaomojiCategory(item.category);
 
-  return {
-    title: `${item.expression} ${item.name} Kaomoji — Meaning & Copy | Glyphtiq`,
+  return constructMetadata({
+    title: `${item.expression} ${item.name} Kaomoji — Meaning & Copy — Glyphtiq`,
     description: `Copy ${item.expression} ${item.name} kaomoji emoticon. ${item.meaning ?? category.description} Includes meaning, usage examples, and related Japanese text faces.`,
-  };
+    path: `/kaomoji/${item.slug}`,
+    keywords: [item.name.toLowerCase(), item.expression, category.name.toLowerCase(), "kaomoji emoticon"],
+  });
 }
 
 export default async function KaomojiDetailPage({ params }: Props) {
@@ -42,9 +46,19 @@ export default async function KaomojiDetailPage({ params }: Props) {
 
   const category = getKaomojiCategory(item.category);
   const related = getRelatedKaomojis(item, 12);
+  const definedTermJsonLd = getDefinedTermJsonLd(
+    item.name,
+    item.expression,
+    category.name,
+    `/kaomoji/${item.slug}`,
+  );
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermJsonLd) }}
+      />
       {/* Breadcrumbs */}
       <nav className="mb-6 flex items-center gap-2 text-xs font-medium text-muted">
         <Link href="/" className="transition-colors hover:text-foreground">

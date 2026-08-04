@@ -9,6 +9,8 @@ import { getSymbolsByCategory } from "@/lib/symbols/data";
 import { SYMBOL_COLLECTIONS } from "@/lib/symbols/collections";
 import { CategoryExplorerClient } from "./CategoryExplorerClient";
 
+import { constructMetadata } from "@/lib/seo";
+
 interface Props {
   params: Promise<{ category: string }>;
 }
@@ -24,19 +26,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = getCategoryBySlug(categorySlug);
 
   if (!category) {
-    return { title: "Category Not Found — Glyphtiq" };
+    return constructMetadata({ title: "Category Not Found — Glyphtiq", noIndex: true });
   }
 
   const symbolCount = getSymbolsByCategory(category.key).length;
 
-  return {
-    title: `${category.name} Symbols (${symbolCount}) — Copy & Paste | Glyphtiq`,
+  return constructMetadata({
+    title: `${category.name} Symbols (${symbolCount}) — Copy & Paste — Glyphtiq`,
     description: `Browse and copy ${symbolCount} ${category.name} Unicode symbols. ${category.description} Click any symbol to copy instantly with JS escape, HTML entity, and code point.`,
-    openGraph: {
-      title: `${category.name} Symbols — Glyphtiq`,
-      description: category.description,
-    },
-  };
+    path: `/symbols/${category.slug}`,
+    keywords: [category.name.toLowerCase(), `${category.name.toLowerCase()} symbols`, "unicode symbols", "copy paste symbols"],
+  });
 }
 
 export default async function CategoryPage({ params }: Props) {

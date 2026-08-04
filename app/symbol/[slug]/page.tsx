@@ -10,6 +10,8 @@ import {
 import { getRelatedSymbols } from "@/lib/symbols/related";
 import { SymbolDetailClient } from "./SymbolDetailClient";
 
+import { constructMetadata, getDefinedTermJsonLd } from "@/lib/seo";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -30,21 +32,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const symbol = getSymbolBySlug(slug);
 
   if (!symbol) {
-    return {
-      title: "Symbol Not Found — Glyphtiq",
-    };
+    return constructMetadata({ title: "Symbol Not Found — Glyphtiq", noIndex: true });
   }
 
   const category = getCategory(symbol.category);
 
-  return {
-    title: `${symbol.char} ${symbol.name} (U+${symbol.codePoint}) — Copy & Unicode Details | Glyphtiq`,
+  return constructMetadata({
+    title: `${symbol.char} ${symbol.name} (U+${symbol.codePoint}) — Copy & Unicode Details — Glyphtiq`,
     description: `Copy ${symbol.char} ${symbol.name} symbol (U+${symbol.codePoint}). Includes JS escape \\u{${symbol.codePoint}}, HTML entity &#x${symbol.codePoint};, Unicode version ${symbol.unicodeVersion}, category ${category.name}, aliases and similar symbols.`,
-    openGraph: {
-      title: `${symbol.char} ${symbol.name} (U+${symbol.codePoint})`,
-      description: `Copy ${symbol.char} ${symbol.name} instantly. Includes code point, JS escape, HTML entities, and related Unicode symbols.`,
-    },
-  };
+    path: `/symbol/${symbol.slug}`,
+    keywords: [symbol.name.toLowerCase(), symbol.char, `U+${symbol.codePoint}`, category.name.toLowerCase()],
+  });
 }
 
 export default async function SymbolDetailPage({ params }: Props) {
@@ -58,9 +56,19 @@ export default async function SymbolDetailPage({ params }: Props) {
   const category = getCategory(symbol.category);
   const relatedSymbols = getRelatedSymbols(symbol, 12);
   const categorySymbols = getSymbolsByCategory(symbol.category).slice(0, 8);
+  const definedTermJsonLd = getDefinedTermJsonLd(
+    symbol.name,
+    symbol.char,
+    category.name,
+    `/symbol/${symbol.slug}`,
+  );
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermJsonLd) }}
+      />
       {/* Breadcrumb Navigation */}
       <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs font-medium text-muted">
         <Link href="/" className="transition-colors hover:text-foreground">

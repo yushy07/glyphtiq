@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader, Section } from "@/components/layout/PageSection";
 import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata: Metadata = constructMetadata({
+  title: "About — Glyphtiq",
   description: `Glyphtiq turns plain text into ${STYLE_COUNT_LABEL} unicode styles — right in your browser. Fast, free and private.`,
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { PageHeader, Section } from "@/components/layout/PageSection";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy",
-  description:
-    "How Glyphtiq handles your data — spoiler: almost everything stays in your browser.",
-};
+export const metadata: Metadata = constructMetadata({
+  title: "Privacy — Glyphtiq",
+  description: "How Glyphtiq handles your data — spoiler: almost everything stays in your browser.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

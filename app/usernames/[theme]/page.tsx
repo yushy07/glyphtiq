@@ -5,6 +5,8 @@ import { THEME_LIST, THEMES } from "@/lib/usernames/themes";
 import type { UsernameThemeKey } from "@/lib/usernames/types";
 import { UsernameStudio } from "@/components/usernames/UsernameStudio";
 
+import { constructMetadata } from "@/lib/seo";
+
 interface Props {
   params: Promise<{ theme: string }>;
 }
@@ -20,13 +22,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const themeObj = THEMES[slug as UsernameThemeKey];
 
   if (!themeObj) {
-    return { title: "Theme Not Found — Glyphtiq" };
+    return constructMetadata({ title: "Theme Not Found — Glyphtiq", noIndex: true });
   }
 
-  return {
-    title: `${themeObj.name} Usernames — Generator & Ideas | Glyphtiq`,
+  return constructMetadata({
+    title: `${themeObj.name} Usernames — Generator & Ideas — Glyphtiq`,
     description: `Generate ${themeObj.name.toLowerCase()} usernames. ${themeObj.description} Perfect for Instagram, Discord, TikTok, and gaming nicknames.`,
-  };
+    path: `/usernames/${themeObj.key}`,
+    keywords: [`${themeObj.name.toLowerCase()} usernames`, `${themeObj.name.toLowerCase()} handles`, "username generator"],
+  });
 }
 
 export default async function UsernameThemePage({ params }: Props) {

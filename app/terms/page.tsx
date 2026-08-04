@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader, Section } from "@/components/layout/PageSection";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions",
-  description:
-    "The terms that apply when you use Glyphtiq — fair, short and readable.",
-};
+export const metadata: Metadata = constructMetadata({
+  title: "Terms & Conditions — Glyphtiq",
+  description: "The terms that apply when you use Glyphtiq — fair, short and readable.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

@@ -8,6 +8,8 @@ import {
 } from "@/lib/symbols/collections";
 import { CategoryExplorerClient } from "@/app/symbols/[category]/CategoryExplorerClient";
 
+import { constructMetadata } from "@/lib/seo";
+
 interface Props {
   params: Promise<{ collection: string }>;
 }
@@ -23,19 +25,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const col = getCollection(slug);
 
   if (!col) {
-    return { title: "Collection Not Found — Glyphtiq" };
+    return constructMetadata({ title: "Collection Not Found — Glyphtiq", noIndex: true });
   }
 
   const matchingSymbols = symbolsInCollection(col);
 
-  return {
-    title: `${col.name} Symbols Collection (${matchingSymbols.length}) — Copy & Paste | Glyphtiq`,
+  return constructMetadata({
+    title: `${col.name} Symbols Collection (${matchingSymbols.length}) — Copy & Paste — Glyphtiq`,
     description: `Explore and copy ${matchingSymbols.length} ${col.name} symbols. ${col.description} Click any symbol to copy instantly for Instagram bios, Discord, Twitter, or text design.`,
-    openGraph: {
-      title: `${col.name} Symbol Collection — Glyphtiq`,
-      description: col.description,
-    },
-  };
+    path: `/collections/${col.slug}`,
+    keywords: [col.name.toLowerCase(), `${col.name.toLowerCase()} symbols`, "symbol collection", "unicode symbols"],
+  });
 }
 
 export default async function CollectionPage({ params }: Props) {

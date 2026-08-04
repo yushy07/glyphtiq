@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { symbols } from "@/lib/symbols/data";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: "Browse Symbols by Unicode Block — Glyphtiq",
   description: "Browse Unicode symbols organized by Unicode Standard blocks: General Punctuation, Arrows, Math Operators, Box Drawing, Dingbats, Braille, and Currency.",
-};
+  path: "/symbols/blocks",
+  keywords: ["unicode blocks", "unicode standard", "math operators", "dingbats", "braille symbols"],
+});
 
 export default function UnicodeBlocksPage() {
   const blocksMap = new Map<string, number>();

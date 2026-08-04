@@ -7,13 +7,10 @@ import { symbols } from "@/lib/symbols/data";
 import { APP_SLUGS } from "@/lib/text-engine/apps";
 import { CATEGORIES } from "@/lib/text-engine/engine";
 import { THEME_LIST } from "@/lib/usernames/themes";
+import { SITE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "https://glyphtiq.vercel.app");
+  const baseUrl = SITE_URL;
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },

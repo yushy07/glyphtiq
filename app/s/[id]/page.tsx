@@ -7,25 +7,24 @@ import { convertToStyle } from "@/lib/text-engine/engine";
 import { getStyleById } from "@/lib/text-engine/styles";
 import { getAppBySlug } from "@/lib/text-engine/apps";
 
+import { constructMetadata } from "@/lib/seo";
+
 type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const share = await getShare(id);
-  if (!share) return { title: "Share not found", robots: { index: false } };
+  if (!share) return constructMetadata({ title: "Share Not Found — Glyphtiq", noIndex: true });
   const styled = getStyleById(share.styleId)
     ? convertToStyle(share.text, share.styleId)
     : share.text;
   const preview = Array.from(styled).slice(0, 140).join("");
-  return {
+  return constructMetadata({
     title: "Shared with Glyphtiq",
     description: preview ? `${preview}…` : "A shared Glyphtiq text.",
-    robots: {
-      index: false,
-      follow: true,
-    },
-    openGraph: { title: "Shared with Glyphtiq", description: preview },
-  };
+    path: `/s/${id}`,
+    noIndex: true,
+  });
 }
 
 export default async function SharedPage({ params }: Props) {

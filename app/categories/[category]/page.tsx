@@ -6,6 +6,8 @@ import { CATEGORIES, CATEGORY_LABELS } from "@/lib/text-engine/engine";
 import { STYLES } from "@/lib/text-engine/styles";
 import { PageHeader } from "@/components/layout/PageSection";
 
+import { constructMetadata } from "@/lib/seo";
+
 type Props = { params: Promise<{ category: string }> };
 
 function resolveCategory(raw: string): (typeof CATEGORIES)[number] | null {
@@ -20,11 +22,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const resolved = resolveCategory(category);
-  if (!resolved) return { title: "Not found" };
-  return {
+  if (!resolved) return constructMetadata({ title: "Not Found — Glyphtiq", noIndex: true });
+  return constructMetadata({
     title: `${CATEGORY_LABELS[resolved]} Fonts — Glyphtiq`,
     description: `Browse ${CATEGORY_LABELS[resolved].toLowerCase()} font styles and convert your own text in one tap.`,
-  };
+    path: `/categories/${resolved}`,
+    keywords: [`${CATEGORY_LABELS[resolved].toLowerCase()} fonts`, `${CATEGORY_LABELS[resolved].toLowerCase()} text`, "font generator"],
+  });
 }
 
 export default async function CategoryPage({ params }: Props) {
