@@ -168,7 +168,12 @@ export function StyleCard({
 
       <div
         className={cn(
-          "mt-1.5 line-clamp-3 rounded-lg bg-surface-2 p-3 leading-relaxed break-words text-foreground",
+          // No line-clamp / overflow-hidden — Unicode glyphs (Zalgo, diacritics,
+          // combining marks, box-art) must never be cropped.
+          // min-h keeps short previews consistent; the box grows when content is taller.
+          "mt-1.5 min-h-[3.5rem] rounded-lg bg-surface-2 px-3 py-3.5 break-words text-foreground",
+          // Generous line-height so ascenders/descenders and stacked marks have room.
+          "leading-[1.9]",
           PREVIEW_SIZE_CLASS[previewSize],
         )}
       >
@@ -226,7 +231,7 @@ export function StyleCard({
                         <span className="text-xs font-bold text-foreground">{variant.style.name}</span>
                         <CopyButton result={variant} onCopy={onCopy} />
                       </div>
-                      <p className="truncate text-xs text-muted">{inputText ? variant.text : variant.style.convert("Glyphtiq")}</p>
+                      <p className="break-words text-xs leading-[1.8] text-muted">{inputText ? variant.text : variant.style.convert("Glyphtiq")}</p>
                     </li>
                   ))}
                 </ul>

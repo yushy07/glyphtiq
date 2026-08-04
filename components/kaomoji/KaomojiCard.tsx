@@ -22,7 +22,7 @@ export function KaomojiCard({
   onInfo,
 }: Props) {
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-card/60 p-4 transition-all hover:border-primary/50 hover:bg-card hover:shadow-xl">
+    <div className="group relative flex flex-col justify-between rounded-2xl glass-card p-4 transition-all hover:border-primary/50 hover:shadow-xl h-[144px]">
       <div className="flex items-center justify-between gap-1 text-[11px] text-muted">
         <span className="font-semibold capitalize truncate">{entry.category}</span>
         <button
@@ -37,13 +37,13 @@ export function KaomojiCard({
         </button>
       </div>
 
-      <div className="my-3 flex items-center justify-center min-h-[64px] text-center">
+      <div className="my-1.5 flex items-center justify-center flex-1 text-center">
         <span className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-foreground transition-transform group-hover:scale-105">
           {entry.expression}
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-2 border-t border-border/50 pt-2.5">
+      <div className="flex items-center justify-between gap-2 border-t border-white/10 bg-black/20 -mx-4 -mb-4 px-3.5 py-2.5 rounded-b-2xl">
         <Link
           href={`/kaomoji/${entry.slug}`}
           className="text-[11px] font-medium text-muted hover:text-primary transition-colors line-clamp-1"

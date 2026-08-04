@@ -3,11 +3,11 @@
 :root {
   color-scheme: dark;
   --background: #09090b;
-  --surface: #18181b;
-  --surface-2: #27272a;
+  --surface: #121218;
+  --surface-2: #1c1c24;
   --foreground: #fafafc;
   --muted: #a1a1aa;
-  --border: #27272a;
+  --border: #272732;
   --primary: #8b5cf6;
   --secondary: #ff4d9d;
   --highlight: #22d3ee;
@@ -58,8 +58,11 @@
     height: 8px;
   }
   *::-webkit-scrollbar-thumb {
-    background: var(--border);
+    background: rgba(139, 92, 246, 0.3);
     border-radius: 8px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.6);
   }
   *::-webkit-scrollbar-track {
     background: transparent;
@@ -96,9 +99,30 @@
 }
 
 @utility glass {
-  background-color: color-mix(in srgb, var(--surface) 45%, transparent);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background-color: rgba(18, 18, 24, 0.86);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+@utility glass-card {
+  background-color: rgba(18, 18, 24, 0.84);
+  background-image: radial-gradient(120% 80% at 50% -20%, rgba(139, 92, 246, 0.08), transparent 60%);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility glass-panel {
+  background-color: rgba(16, 16, 22, 0.88);
+  background-image: radial-gradient(100% 60% at 50% 0%, rgba(139, 92, 246, 0.06), transparent 70%);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 @keyframes spotlight-glow {
@@ -119,12 +143,14 @@
 }
 
 @utility panel-surface {
-  background-color: rgb(30 30 34);
+  background-color: rgba(18, 18, 24, 0.88);
   background-image:
-    radial-gradient(120% 80% at 50% -20%, rgb(139 92 246 / 0.16), transparent 55%),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015) 30%, rgb(255 255 255 / 0));
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
+    radial-gradient(120% 80% at 50% -20%, rgba(139, 92, 246, 0.12), transparent 55%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015) 30%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 body::after {

@@ -69,9 +69,11 @@ export function SymbolFilters(props: SymbolFiltersProps) {
                   )}
                 >
                   {item.label}
-                  <span className={cn("text-[10px] tabular-nums", active ? "text-primary" : "text-muted/60")}>
-                    {item.count(props).toLocaleString()}
-                  </span>
+                  {item.count(props) > 0 && (
+                    <span className={cn("text-[10px] tabular-nums", active ? "text-primary" : "text-muted/60")}>
+                      {item.count(props).toLocaleString()}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -132,7 +134,9 @@ export function SymbolFilters(props: SymbolFiltersProps) {
               )}
             >
               {c.name}
-              <span className="ml-1 text-[10px] tabular-nums opacity-60">{counts[c.key].toLocaleString()}</span>
+              {counts[c.key] > 0 && (
+                <span className="ml-1 text-[10px] tabular-nums opacity-60">{counts[c.key].toLocaleString()}</span>
+              )}
             </button>
           );
         })}

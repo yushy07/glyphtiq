@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Apps Dropdown (Mega Menu)** — 4-column scrollable app explorer powered by data-driven `NAV_SECTIONS` config.
+- **Universal Search Bar** — global search modal with keyboard shortcut support (`Cmd+K` / `Ctrl+K`).
+- **Glassmorphism UI System** — unified opaque glass styling (`.glass-card`, `.glass-panel`) across headers, dropdowns, panels, and cards.
+- **Kaomoji & Symbol Explorer UI Refinements** — optimized spacing, floating action footers, and non-clipping flexible card height layout.
 - **Symbol library** — 8 groups of symbols (hearts, stars, gaming, royal, brackets, arrows, nature, kawaii) with search, insert-at-cursor and copy-per-symbol on the home generator and all 20 app pages.
 - **Comparison tray** — pin up to 4 styles side-by-side, copy or remove individually, clear all. Persisted in local storage.
 - **Gaming name composer** — prefix, clan tag and suffix builder on gaming pages (Free Fire, PUBG, Roblox, Fortnite, Minecraft, Mobile Legends, COD Mobile, Valorant, Gaming).
@@ -19,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Global Unicode encoding fix for `apps.ts` preset strings (reversed Windows-1252 double-encoding).
+- Migrated deprecated `THREE.Clock` to `THREE.Timer` in `FloatingLines.tsx`.
+- Hidden `0` count badges globally across category, family, and symbol filter chips.
 - `next build` workspace-root warning by pinning `outputFileTracingRoot`.
 - Unused import in `SymbolLibrary`.
 

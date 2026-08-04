@@ -71,7 +71,7 @@ export function ComparisonTray({ items, onCopy, onRemove, onClear }: ComparisonT
                 <X className="size-3.5" aria-hidden />
               </button>
             </div>
-            <p className="mt-2 line-clamp-3 min-h-14 flex-1 text-sm leading-relaxed break-words whitespace-pre-wrap text-foreground">
+            <p className="mt-2 min-h-14 flex-1 text-sm leading-[1.9] break-words whitespace-pre-wrap text-foreground">
               {result.text}
             </p>
             <button

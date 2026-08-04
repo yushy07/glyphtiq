@@ -14,8 +14,8 @@ interface Props {
   onInfo: (entry: KaomojiEntry) => void;
 }
 
-const CARD_HEIGHT = 140;
-const GAP = 12;
+const CARD_HEIGHT = 144;
+const GAP = 16;
 const MIN_COL_WIDTH = 160;
 
 export function KaomojiGrid({

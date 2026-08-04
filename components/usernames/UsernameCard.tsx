@@ -21,7 +21,7 @@ export function UsernameCard({
   const isHighQuality = result.score.totalScore >= 80;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-card/60 p-4 transition-all hover:border-primary/50 hover:bg-card hover:shadow-xl">
+    <div className="group relative flex flex-col justify-between rounded-2xl glass-card p-4 transition-all hover:border-primary/50 hover:shadow-xl">
       <div className="flex items-center justify-between gap-2 text-[11px]">
         <div className="flex items-center gap-1.5">
           <span className="font-semibold text-primary capitalize">{result.theme}</span>

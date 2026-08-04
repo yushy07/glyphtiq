@@ -90,7 +90,7 @@ export function UsernameStudio({
       </header>
 
       {/* Control Panel: Name Input, Platform Picker, Theme Picker, Decorations & Fonts */}
-      <section className="rounded-3xl border border-border/80 bg-card/60 p-6 sm:p-8 shadow-xl space-y-6">
+      <section className="rounded-3xl glass-card p-6 sm:p-8 shadow-xl space-y-6">
         <div className="grid gap-4 sm:grid-cols-3">
           {/* Base Name Input */}
           <div className="sm:col-span-1">
@@ -226,7 +226,7 @@ export function UsernameStudio({
           </span>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {results.map((result) => (
             <UsernameCard
               key={result.id}

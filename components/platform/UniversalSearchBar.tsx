@@ -37,22 +37,19 @@ export function UniversalSearchBar() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-full border border-border/80 bg-background/60 px-3.5 py-1.5 text-xs text-muted hover:border-primary/50 hover:text-foreground transition-all"
+        className="flex items-center gap-2 rounded-full border border-white/10 bg-[#121218]/85 px-3.5 py-1.5 text-xs text-muted backdrop-blur-xl hover:border-white/20 hover:bg-[#161620]/92 hover:text-foreground transition-all"
       >
         <Search className="size-3.5" />
         <span>Search anything...</span>
-        <kbd className="hidden rounded border border-border/60 bg-surface-2 px-1.5 py-0.5 text-[10px] font-mono sm:inline-block">
-          ⌘K
-        </kbd>
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4">
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity"
             onClick={() => setOpen(false)}
           />
-          <div className="relative z-10 w-full max-w-xl rounded-3xl border border-border bg-card p-4 shadow-2xl animate-in fade-in duration-150">
+          <div className="relative z-10 w-full max-w-xl rounded-3xl border border-white/12 bg-[#101016]/92 p-4 shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-2xl animate-in fade-in duration-150">
             <div className="flex items-center gap-3 border-b border-border/60 pb-3 px-2">
               <Search className="size-5 text-muted" />
               <input
@@ -104,7 +101,7 @@ export function UniversalSearchBar() {
 
             {query.trim() && results.length === 0 && (
               <div className="py-8 text-center text-xs text-muted">
-                No matching symbols, kaomojis, or fonts found for "{query}".
+                No matching symbols, kaomojis, or fonts found for &ldquo;{query}&rdquo;.
               </div>
             )}
           </div>

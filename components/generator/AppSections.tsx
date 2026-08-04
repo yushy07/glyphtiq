@@ -67,7 +67,7 @@ export const AppSections = memo(function AppSections({ sections, onPick, sampleT
                   title={`${style.name} — copy & jump to it`}
                   className="group w-40 shrink-0 snap-start rounded-xl border border-border glass p-3 text-left transition-all hover:border-primary/50 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
-                  <p className="line-clamp-2 text-base leading-snug break-words text-foreground/90 group-hover:text-foreground">
+                  <p className="min-h-[2.6rem] text-base leading-[1.85] break-words text-foreground/90 group-hover:text-foreground">
                     {preview}
                   </p>
                   <span className="mt-1.5 block truncate text-xs font-bold text-foreground">

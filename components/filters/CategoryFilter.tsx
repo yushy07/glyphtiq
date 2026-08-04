@@ -66,7 +66,7 @@ export function CategoryPill({
       )}
       <span className="relative">
         {LABELS[value]}
-        {typeof count === "number" && (
+        {typeof count === "number" && count > 0 && (
           <span className={cn("ml-1.5 text-xs font-medium", active ? "text-white/80" : "text-muted")}>
             {count}
           </span>

@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import React, { useEffect, useRef, type CSSProperties } from "react";
 import {
-  Clock,
   Mesh,
   OrthographicCamera,
   PlaneGeometry,
   Scene,
   ShaderMaterial,
+  Timer,
   Vector2,
   Vector3,
   WebGLRenderer,
@@ -396,7 +396,7 @@ const FloatingLines = ({
     const mesh = new Mesh(geometry, material);
     scene.add(mesh);
 
-    const clock = new Clock();
+    const timer = new Timer();
 
     const setSize = () => {
       if (!active) return;
@@ -479,7 +479,8 @@ const FloatingLines = ({
         return;
       }
 
-      uniforms.iTime.value = clock.getElapsedTime();
+      timer.update();
+      uniforms.iTime.value = timer.getElapsed();
 
       if (interactive) {
         currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);
@@ -514,6 +515,7 @@ const FloatingLines = ({
       doc.removeEventListener("focusout", updatePaused);
       mq?.removeEventListener?.("change", updatePaused);
 
+      timer.dispose();
       geometry.dispose();
       material.dispose();
       renderer.dispose();
