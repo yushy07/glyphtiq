@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, Clock } from "lucide-react";
+import { Clock, Github } from "lucide-react";
 import { PageHeader, Section } from "@/components/layout/PageSection";
 import { ContactForm } from "@/components/contact/ContactForm";
 
@@ -25,8 +25,9 @@ export default function ContactPage() {
       <div className="space-y-10">
         <Section title="Send a message">
           <p>
-            Fill in the form and it will open your email app with everything
-            pre-filled — your message never passes through a server.
+            Fill in the form and it will open a pre-filled GitHub issue — no
+            account needed to read it, but you&apos;ll need a GitHub account to
+            submit it.
           </p>
           <div className="rounded-2xl border border-border glass p-5">
             <ContactForm />
@@ -37,15 +38,17 @@ export default function ContactPage() {
           <ul className="space-y-3">
             <li className="flex items-center gap-3">
               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-surface-2">
-                <Mail className="size-4 text-primary" aria-hidden />
+                <Github className="size-4 text-primary" aria-hidden />
               </span>
               <div>
-                <p className="text-sm font-bold text-foreground">Email</p>
+                <p className="text-sm font-bold text-foreground">GitHub</p>
                 <a
-                  href="mailto:hello@glyphy.app"
+                  href="https://github.com/yushy07/glyphy/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-primary underline-offset-2 hover:underline"
                 >
-                  hello@glyphy.app
+                  Open an issue on GitHub
                 </a>
               </div>
             </li>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Send } from "lucide-react";
 import Button from "@/components/ui/Button";
 
-const CONTACT_EMAIL = "hello@glyphy.app";
+const GITHUB_ISSUES_URL = "https://github.com/yushy07/glyphy/issues/new";
 
 const inputClass =
   "h-11 w-full rounded-xl border border-border glass px-4 text-sm text-foreground placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
@@ -16,11 +16,11 @@ export function ContactForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const subject = encodeURIComponent(`Contact from ${name || "the Glyphy site"}`);
+    const title = encodeURIComponent(`Contact from ${name || "the Glyphy site"}`);
     const body = encodeURIComponent(
       `${message}\n\n— ${name || "Anonymous"}${email ? `\n${email}` : ""}`,
     );
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    window.open(`${GITHUB_ISSUES_URL}?title=${title}&body=${body}`, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -76,8 +76,8 @@ export function ContactForm() {
           Send message
         </Button>
         <p className="text-xs text-muted">
-          Opens your email app with everything pre-filled — nothing is sent to
-          a server.
+          Opens a pre-filled GitHub issue in a new tab — nothing is sent to a
+          server. You&apos;ll need a GitHub account to submit it.
         </p>
       </div>
     </form>
