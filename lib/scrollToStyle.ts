@@ -28,7 +28,9 @@ export function scrollToStyleById(styleId: string): () => void {
       raf = requestAnimationFrame(tick);
       return;
     }
-    const top = el.getBoundingClientRect().top;
+    // Read layout position in a fresh animation frame
+    const rect = el.getBoundingClientRect();
+    const top = rect.top;
     if (lastTop !== null && Math.abs(top - lastTop) <= STABLE_EPSILON) {
       stableFrames += 1;
     } else {

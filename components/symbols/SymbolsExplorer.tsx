@@ -12,11 +12,18 @@ import {
 import { sortSymbols, type SymbolSort } from "@/lib/symbols/rank";
 import { searchSymbols } from "@/lib/symbols/search";
 import type { SymbolCategoryKey, SymbolEntry } from "@/lib/symbols/types";
-import { FavoritesExportModal } from "./FavoritesExportModal";
+import dynamic from "next/dynamic";
 import { SymbolFilters, type SymbolView } from "./SymbolFilters";
 import { SymbolGrid } from "./SymbolGrid";
-import { SymbolModal } from "./SymbolModal";
 import { SymbolShelf } from "./SymbolShelf";
+
+const SymbolModal = dynamic(() => import("./SymbolModal").then((m) => m.SymbolModal), {
+  ssr: false,
+});
+
+const FavoritesExportModal = dynamic(() => import("./FavoritesExportModal").then((m) => m.FavoritesExportModal), {
+  ssr: false,
+});
 
 const SEARCH_LIMIT = 2000;
 

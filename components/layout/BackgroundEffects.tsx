@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 
 const FloatingLines = dynamic(() => import("@/components/ui/FloatingLines"), {
@@ -16,22 +16,43 @@ interface BackgroundEffectsProps {
 }
 
 export function BackgroundEffects({ children }: BackgroundEffectsProps) {
+  const [showCanvas, setShowCanvas] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const win = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+
+    if (typeof win.requestIdleCallback === "function") {
+      const handle = win.requestIdleCallback(() => setShowCanvas(true), { timeout: 1000 });
+      return () => win.cancelIdleCallback?.(handle);
+    } else {
+      const timer = window.setTimeout(() => setShowCanvas(true), 100);
+      return () => window.clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <>
-      <FloatingLines
-        linesGradient={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-        enabledWaves={["top", "middle", "bottom"]}
-        lineCount={[6, 9, 12]}
-        lineDistance={21.5}
-        bendRadius={6}
-        bendStrength={-1.5}
-        animationSpeed={0.8}
-        parallax
-        parallaxStrength={0.12}
-        interactive
-        mixBlendMode="screen"
-        style={{ position: "fixed", inset: 0, zIndex: -1, opacity: 0.6 }}
-      />
+      {showCanvas && (
+        <FloatingLines
+          linesGradient={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
+          enabledWaves={["top", "middle", "bottom"]}
+          lineCount={[6, 9, 12]}
+          lineDistance={21.5}
+          bendRadius={6}
+          bendStrength={-1.5}
+          animationSpeed={0.8}
+          parallax
+          parallaxStrength={0.12}
+          interactive
+          mixBlendMode="screen"
+          style={{ position: "fixed", inset: 0, zIndex: -1, opacity: 0.6 }}
+        />
+      )}
       <ClickSpark
         sparkColor="#a78bfa"
         sparkSize={18}
