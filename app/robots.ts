@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "https://glyphy-one.vercel.app");
+      : "https://glyphtiq.vercel.app");
 
   return {
     rules: {

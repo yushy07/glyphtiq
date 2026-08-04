@@ -9,7 +9,7 @@ interface SEOOptions {
 }
 
 export function buildMetadata({ title, description, path, type = "website", image }: SEOOptions): Metadata {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphy-one.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphtiq.vercel.app";
   const url = `${baseUrl}${path}`;
   const defaultImage = `${baseUrl}/opengraph-image.png`;
 
@@ -44,7 +44,7 @@ export function buildMetadata({ title, description, path, type = "website", imag
 }
 
 export function generateBreadcrumbSchema(crumbs: Array<{ name: string; url: string }>) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphy-one.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphtiq.vercel.app";
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

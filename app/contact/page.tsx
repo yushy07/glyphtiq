@@ -25,9 +25,7 @@ export default function ContactPage() {
       <div className="space-y-10">
         <Section title="Send a message">
           <p>
-            Fill in the form and it will open a pre-filled GitHub issue — no
-            account needed to read it, but you&apos;ll need a GitHub account to
-            submit it.
+            Fill in the form and it will open a pre-filled GitHub issue. Reading issues is public, and you&apos;ll need a GitHub account only if you want to submit the issue.
           </p>
           <div className="rounded-2xl border border-border glass p-5">
             <ContactForm />
@@ -43,7 +41,7 @@ export default function ContactPage() {
               <div>
                 <p className="text-sm font-bold text-foreground">GitHub</p>
                 <a
-                  href="https://github.com/yushy07/glyphy/issues"
+                  href="https://github.com/yushy07/glyphtiq/issues"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-primary underline-offset-2 hover:underline"

@@ -8,7 +8,7 @@ import ClickSpark from "@/components/ui/ClickSpark";
 import FloatingLines from "@/components/ui/FloatingLines";
 import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphy-one.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphtiq.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
