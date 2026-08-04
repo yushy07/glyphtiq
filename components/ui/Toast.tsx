@@ -51,7 +51,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ push }}>
       {children}
       <div
+        role="status"
         aria-live="polite"
+        aria-atomic="true"
         className="pointer-events-none fixed inset-x-0 bottom-4 z-[60] flex flex-col items-center gap-2 px-4 pb-[env(safe-area-inset-bottom)]"
       >
         <AnimatePresence>

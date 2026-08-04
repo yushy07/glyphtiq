@@ -48,9 +48,27 @@ const WHY_FEATURES = [
   },
 ];
 
+import { getWebApplicationJsonLd, getWebSiteJsonLd } from "@/lib/seo";
+
 export default function HomePage() {
+  const websiteJsonLd = getWebSiteJsonLd();
+  const appJsonLd = getWebApplicationJsonLd(
+    "Glyphtiq — Fancy Text Generator",
+    `Turn plain text into ${STYLE_COUNT_LABEL} unicode fancy styles. Fast, free and 100% in your browser.`,
+    "/",
+  );
+
   return (
     <div className="overflow-x-clip">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
+      />
+
       <div id="generator" className="scroll-mt-16">
         <Suspense>
           <HomeExperience />
@@ -69,9 +87,9 @@ export default function HomePage() {
                 <fact.icon className="size-5" aria-hidden />
               </div>
               <div className="text-left">
-                <h3 className="text-xs sm:text-sm font-bold tracking-tight text-foreground">
+                <h2 className="text-xs sm:text-sm font-bold tracking-tight text-foreground">
                   {fact.title}
-                </h3>
+                </h2>
                 <p className="mt-0.5 text-[11px] leading-snug text-muted/80 sm:text-xs">
                   {fact.subtitle}
                 </p>

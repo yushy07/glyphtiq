@@ -35,7 +35,7 @@ export function ExplorerStage({ count, open, onOpenChange, children }: ExplorerS
   }, [open, onOpenChange]);
 
   return (
-    <section aria-label="Explorer" className="mx-auto w-full max-w-5xl px-4">
+    <section aria-label="Explorer" className="mx-auto w-full max-w-5xl px-4 min-h-[200px]">
       <StageDivider
         emoji="🗂️"
         title={`Browse all ${count.toLocaleString()} styles`}
@@ -46,7 +46,7 @@ export function ExplorerStage({ count, open, onOpenChange, children }: ExplorerS
       ) : (
         <div
           ref={gateRef}
-          className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-border/60 glass px-6 py-12 text-center"
+          className="flex min-h-[180px] flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-border/60 glass px-6 py-12 text-center"
         >
           <span className="grid size-12 place-items-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
             <Grid2x2 className="size-6" aria-hidden />

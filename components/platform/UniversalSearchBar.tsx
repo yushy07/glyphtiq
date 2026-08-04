@@ -27,24 +27,45 @@ export function UniversalSearchBar() {
         e.preventDefault();
         setOpen((v) => !v);
       }
+      if (e.key === "Escape" && open) {
+        setOpen(false);
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <div ref={containerRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen(true)}
+        aria-expanded={open}
+        aria-haspopup="dialog"
         className="flex items-center gap-2 rounded-full border border-white/10 bg-[#121218]/85 px-3.5 py-1.5 text-xs text-muted backdrop-blur-xl hover:border-white/20 hover:bg-[#161620]/92 hover:text-foreground transition-all"
       >
-        <Search className="size-3.5" />
+        <Search className="size-3.5" aria-hidden />
         <span>Search anything...</span>
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Universal search"
+          className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4"
+        >
           <div
             className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity"
             onClick={() => setOpen(false)}

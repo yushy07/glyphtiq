@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
   reactStrictMode: true,
   poweredByHeader: false,
+  experimental: {
+    optimizePackageImports: ["lucide-react", "react-icons"],
+  },
   async headers() {
     return [
       {

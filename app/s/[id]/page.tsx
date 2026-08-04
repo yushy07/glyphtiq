@@ -12,7 +12,7 @@ type Props = { params: Promise<{ id: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const share = await getShare(id);
-  if (!share) return { title: "Share not found" };
+  if (!share) return { title: "Share not found", robots: { index: false } };
   const styled = getStyleById(share.styleId)
     ? convertToStyle(share.text, share.styleId)
     : share.text;
@@ -20,6 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: "Shared with Glyphtiq",
     description: preview ? `${preview}…` : "A shared Glyphtiq text.",
+    robots: {
+      index: false,
+      follow: true,
+    },
     openGraph: { title: "Shared with Glyphtiq", description: preview },
   };
 }

@@ -116,10 +116,10 @@ export function StyleCard({
     <motion.article
       layout
       id={`style-${style.id}`}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ type: "spring", stiffness: 300, damping: 28 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
       onClick={(e) => {
         const target = e.target as HTMLElement;
         if (target.closest("button") || target.closest("a")) return;
@@ -180,7 +180,7 @@ export function StyleCard({
         {preview}
       </div>
 
-      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 sm:mt-0 sm:max-h-0 sm:opacity-0 sm:transition-all sm:duration-300 sm:group-hover:mt-2 sm:group-hover:max-h-12 sm:group-hover:opacity-100">
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 min-h-[1.5rem] sm:mt-2">
         <span className="text-[11px] font-semibold text-muted">🔥 {meta.popularity} popularity</span>
         {platforms.length > 0 && (
           <span className="text-[11px] font-semibold text-muted">Works on {platforms.join(", ")}</span>

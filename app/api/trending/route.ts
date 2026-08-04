@@ -36,10 +36,13 @@ export async function GET(request: Request) {
 
   const app = url.searchParams.get("app")?.trim() ?? undefined;
   const trending = await topTrending(7, 12, app);
+  const cacheHeader = { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" };
+
   if (trending.length === 0) {
     return NextResponse.json(
       FALLBACK_TRENDING.map((styleId, i) => ({ styleId, count: FALLBACK_TRENDING.length - i })),
+      { headers: cacheHeader },
     );
   }
-  return NextResponse.json(trending);
+  return NextResponse.json(trending, { headers: cacheHeader });
 }

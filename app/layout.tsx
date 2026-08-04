@@ -1,12 +1,18 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ToastProvider } from "@/components/ui/Toast";
-import ClickSpark from "@/components/ui/ClickSpark";
-import FloatingLines from "@/components/ui/FloatingLines";
+import { BackgroundEffects } from "@/components/layout/BackgroundEffects";
 import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+});
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphtiq.vercel.app";
 
@@ -18,6 +24,9 @@ export const metadata: Metadata = {
   },
   description: `Turn plain text into ${STYLE_COUNT_LABEL} unicode fancy styles — bold, cursive, gothic, zalgo, bubble and more. Fast, free and 100% in your browser.`,
   manifest: "/manifest.json",
+  alternates: {
+    canonical: "./",
+  },
   keywords: [
     "fancy text",
     "unicode text",
@@ -51,37 +60,25 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body className="min-h-dvh antialiased">
+    <html lang="en" className={`dark ${inter.variable}`} suppressHydrationWarning>
+      <body className="min-h-dvh antialiased font-sans">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-xl focus:bg-primary focus:px-4 focus:py-2.5 focus:text-xs focus:font-bold focus:text-white focus:shadow-xl focus:outline-none"
+        >
+          Skip to main content
+        </a>
         <MotionConfig reducedMotion="user">
           <ToastProvider>
-            <FloatingLines
-              linesGradient={["#8b5cf6", "#ff4d9d", "#22d3ee"]}
-              enabledWaves={["top", "middle", "bottom"]}
-              lineCount={[6, 9, 12]}
-              lineDistance={21.5}
-              bendRadius={6}
-              bendStrength={-1.5}
-              animationSpeed={0.8}
-              parallax
-              parallaxStrength={0.12}
-              interactive
-              mixBlendMode="screen"
-              style={{ position: "fixed", inset: 0, zIndex: -1, opacity: 0.6 }}
-            />
-            <ClickSpark
-              sparkColor="#a78bfa"
-              sparkSize={18}
-              sparkRadius={34}
-              sparkCount={10}
-              duration={500}
-            >
+            <BackgroundEffects>
               <div className="flex min-h-dvh flex-col">
                 <Header />
-                <div className="flex-1">{children}</div>
+                <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+                  {children}
+                </main>
                 <Footer />
               </div>
-            </ClickSpark>
+            </BackgroundEffects>
           </ToastProvider>
         </MotionConfig>
       </body>

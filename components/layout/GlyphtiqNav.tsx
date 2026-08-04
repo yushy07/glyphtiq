@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { gsap } from "gsap";
 import { Heart, Home, Shapes, Smile, Type, User } from "lucide-react";
 import { Logo } from "./Logo";
 import { NavPill } from "./NavPill";
@@ -18,57 +17,19 @@ interface GlyphtiqNavProps {
 export function GlyphtiqNav({ scrolled = false }: GlyphtiqNavProps) {
   const pathname = usePathname();
   const [appsOpen, setAppsOpen] = useState(false);
-  const logoRef = useRef<HTMLAnchorElement>(null);
-  const navContainerRef = useRef<HTMLDivElement>(null);
 
   const isHome = pathname === "/";
   const isNavActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  useEffect(() => {
-    if (navContainerRef.current) {
-      gsap.fromTo(
-        navContainerRef.current,
-        { opacity: 0, y: -10 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
-      );
-    }
-  }, []);
-
-  const handleLogoMouseEnter = () => {
-    if (logoRef.current) {
-      gsap.to(logoRef.current, {
-        scale: 1.05,
-        duration: 0.25,
-        ease: "power2.out",
-      });
-    }
-  };
-
-  const handleLogoMouseLeave = () => {
-    if (logoRef.current) {
-      gsap.to(logoRef.current, {
-        scale: 1,
-        duration: 0.25,
-        ease: "power2.out",
-      });
-    }
-  };
-
   return (
-    <div
-      ref={navContainerRef}
-      className="hidden w-full items-center justify-between gap-3 md:flex"
-    >
+    <div className="hidden w-full items-center justify-between gap-3 md:flex">
       {/* Left: Logo */}
       <Link
-        ref={logoRef}
         href="/"
         aria-label="Glyphtiq home"
         onClick={() => trackNavClick("logo", "/")}
-        onMouseEnter={handleLogoMouseEnter}
-        onMouseLeave={handleLogoMouseLeave}
-        className="shrink-0 rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary transition-shadow"
+        className="shrink-0 rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary transition-transform duration-200 hover:scale-105"
       >
         <Logo compact={scrolled} />
       </Link>

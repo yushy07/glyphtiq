@@ -6,11 +6,15 @@ import { stylesForApp } from "@/lib/text-engine/engine";
 import { PageHeader } from "@/components/layout/PageSection";
 import type { AppType } from "@/lib/text-engine/types";
 
-export const metadata: Metadata = {
-  title: "All Fonts Generators — Glyphtiq",
+import { constructMetadata, getBreadcrumbJsonLd, SITE_URL } from "@/lib/seo";
+
+export const metadata: Metadata = constructMetadata({
+  title: "All Font Generators — Glyphtiq",
   description:
-    "Browse every dedicated font and name generator: Instagram, TikTok, X, Free Fire, PUBG, Roblox and more.",
-};
+    "Browse 20+ dedicated font and name generators for Instagram, TikTok, X, Free Fire, PUBG, Discord, Roblox, and more.",
+  path: "/fonts",
+  keywords: ["all font generators", "fancy text fonts", "social media text generator", "gaming font changer"],
+});
 
 const TYPE_META: Record<AppType, { label: string; icon: typeof Heart; blurb: string }> = {
   social: { label: "Social media", icon: Heart, blurb: "Bios, captions, profiles and posts." },
@@ -19,8 +23,17 @@ const TYPE_META: Record<AppType, { label: string; icon: typeof Heart; blurb: str
 };
 
 export default function FontsPage() {
+  const breadcrumbJsonLd = getBreadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "All Fonts", path: "/fonts" },
+  ]);
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <PageHeader
         title="All font generators"
         subtitle="Twenty dedicated generators, one engine. Every style converts locally in your browser — nothing is ever uploaded."

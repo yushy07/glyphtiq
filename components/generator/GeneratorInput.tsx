@@ -55,13 +55,13 @@ export function GeneratorInput({
           placeholder="Type your text here..."
           rows={3}
           aria-label="Text to convert"
-          className="block min-h-24 w-full resize-none bg-transparent text-base leading-relaxed text-foreground placeholder:text-muted/60 focus-visible:outline-none"
+          className="block min-h-24 w-full resize-none bg-transparent text-base leading-relaxed text-foreground placeholder:text-muted-foreground/80 focus-visible:outline-none"
         />
         <div className="flex justify-end pt-1">
           <p
             className={cn(
               "text-xs font-mono font-medium tabular-nums",
-              count >= maxLength ? "text-secondary" : "text-muted/70",
+              count >= maxLength ? "text-secondary font-bold" : "text-muted-foreground",
             )}
             aria-live="polite"
           >
