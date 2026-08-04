@@ -63,7 +63,7 @@ export const GeneratorStage = memo(function GeneratorStage({
       <section aria-label="Hero" className="flex flex-col items-center gap-4 pt-8 pb-6 text-center sm:pt-12">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-surface/70 px-3.5 py-1 text-[11px] font-bold tracking-widest text-primary uppercase backdrop-blur-sm shadow-sm">
           <Sparkles className="size-3" aria-hidden />
-          Glyphy · Fancy text, locally
+          Glyphtiq · Fancy text, locally
         </span>
         <h1 className="max-w-3xl text-4xl font-black tracking-tight text-foreground sm:text-6xl">
           Make your words <span className="gradient-text">flow</span>

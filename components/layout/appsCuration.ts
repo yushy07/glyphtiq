@@ -124,7 +124,7 @@ export function previewForApp(app: AppConfig): string[] {
   for (const id of PREVIEW_IDS) {
     const style = getStyleById(id);
     if (style && compatScore(style, app.key) >= 40) {
-      previews.push(convertToStyle("Glyphy", id));
+      previews.push(convertToStyle("Glyphtiq", id));
     }
   }
   return previews;

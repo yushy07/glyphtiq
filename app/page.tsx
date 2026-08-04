@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { Globe, Lock, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import { HomeExperience } from "@/components/home/HomeExperience";
 import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
@@ -80,9 +81,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="why" className="mx-auto w-full max-w-6xl scroll-mt-16 px-4 pt-12 pb-20 sm:pt-16 sm:pb-24">
+      <section id="symbols-preview" className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
+        <div className="flex flex-col items-center justify-between gap-4 rounded-3xl border border-border/80 bg-card/40 p-8 sm:flex-row sm:p-10">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+              Unicode Library
+            </span>
+            <h2 className="mt-1 text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+              2,000+ Copy & Paste Symbols
+            </h2>
+            <p className="mt-2 text-sm text-muted max-w-xl">
+              Hearts, arrows, stars, math operators, chess pieces, box drawing characters, and braille patterns. Copy code points, JS escapes, and HTML entities instantly.
+            </p>
+          </div>
+          <Link
+            href="/symbols"
+            className="btn-gradient shrink-0 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-transform hover:scale-105"
+          >
+            Explore Symbol Library →
+          </Link>
+        </div>
+      </section>
+
+      <section id="why" className="mx-auto w-full max-w-6xl scroll-mt-16 px-4 pt-4 pb-20 sm:pb-24">
         <h2 className="text-center text-2xl font-black tracking-tight text-foreground sm:text-3xl">
-          Why <span className="gradient-text">Glyphy</span>
+          Why <span className="gradient-text">Glyphtiq</span>
         </h2>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
           {WHY_FEATURES.map((feature) => (

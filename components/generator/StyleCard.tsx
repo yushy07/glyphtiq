@@ -100,7 +100,7 @@ export function StyleCard({
   const { style, text } = result;
   const meta = resolveStyleMetadata(style);
 
-  const preview = inputText ? text : style.convert("Glyphy");
+  const preview = inputText ? text : style.convert("Glyphtiq");
 
   const platforms = meta.recommendedPlatforms
     .map((p) => getAppByKey(p)?.name)
@@ -226,7 +226,7 @@ export function StyleCard({
                         <span className="text-xs font-bold text-foreground">{variant.style.name}</span>
                         <CopyButton result={variant} onCopy={onCopy} />
                       </div>
-                      <p className="truncate text-xs text-muted">{inputText ? variant.text : variant.style.convert("Glyphy")}</p>
+                      <p className="truncate text-xs text-muted">{inputText ? variant.text : variant.style.convert("Glyphtiq")}</p>
                     </li>
                   ))}
                 </ul>

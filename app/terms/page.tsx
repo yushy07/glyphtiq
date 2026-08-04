@@ -5,7 +5,7 @@ import { PageHeader, Section } from "@/components/layout/PageSection";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
-    "The terms that apply when you use Glyphy — fair, short and readable.",
+    "The terms that apply when you use Glyphtiq — fair, short and readable.",
 };
 
 export default function TermsPage() {
@@ -19,14 +19,14 @@ export default function TermsPage() {
       <div className="space-y-10">
         <Section title="1. Acceptance of terms">
           <p>
-            By accessing or using Glyphy you agree to be bound by these terms.
+            By accessing or using Glyphtiq you agree to be bound by these terms.
             If you do not agree, please do not use the service.
           </p>
         </Section>
 
         <Section title="2. The service">
           <p>
-            Glyphy offers a browser-based tool that converts text into unicode
+            Glyphtiq offers a browser-based tool that converts text into unicode
             styles. We may modify, suspend or discontinue any part of the
             service at any time without notice.
           </p>
@@ -67,7 +67,7 @@ export default function TermsPage() {
 
         <Section title="7. Limitation of liability">
           <p>
-            To the maximum extent permitted by law, Glyphy and its maintainers
+            To the maximum extent permitted by law, Glyphtiq and its maintainers
             will not be liable for any damages arising from your use of, or
             inability to use, the service.
           </p>

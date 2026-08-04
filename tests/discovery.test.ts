@@ -30,8 +30,8 @@ describe("homepage highlights pool", () => {
 
   it("every highlight converts real text", () => {
     for (const style of highlightsPool()) {
-      expect(typeof style.convert("Glyphy")).toBe("string");
-      expect(style.convert("Glyphy").length).toBeGreaterThan(0);
+      expect(typeof style.convert("Glyphtiq")).toBe("string");
+      expect(style.convert("Glyphtiq").length).toBeGreaterThan(0);
     }
   });
 });

@@ -6,7 +6,7 @@ import { FAMILY_LABELS, searchStyles } from "@/lib/text-engine/engine";
 import { resolveStyleMetadata } from "@/lib/text-engine/quality";
 import { STYLES } from "@/lib/text-engine/styles";
 
-/** Glyphy v2 product flow guardrails. These are the non-negotiables:
+/** Glyphtiq v2 product flow guardrails. These are the non-negotiables:
  *  6–8 card shelves, fixed mood order, pool-canonical Best grid, and a
  *  global Explorer search. */
 

@@ -1,6 +1,6 @@
 # Security Policy
 
-Glyphy takes security seriously. The app is designed to be privacy-first: the core text generator runs entirely in the browser and never uploads your text.
+Glyphtiq takes security seriously. The app is designed to be privacy-first: the core text generator runs entirely in the browser and never uploads your text.
 
 ## Supported versions
 

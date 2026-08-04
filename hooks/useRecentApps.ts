@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 
-const KEY = "glyphy:recent-apps";
+const KEY = "glyphtiq:recent-apps";
 
 export interface RecentAppEntry {
   slug: string;

@@ -4,7 +4,7 @@ test.describe("navigation redesign", () => {
   test("desktop shows logo, quick apps, nav, search and CTA", async ({ page }) => {
     await page.goto("/");
     const header = page.locator("header");
-    await expect(header.getByRole("link", { name: "Glyphy home" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Glyphtiq home" })).toBeVisible();
     for (const name of ["Instagram", "Discord", "Free Fire"]) {
       await expect(header.getByRole("link", { name })).toBeVisible();
     }
@@ -48,7 +48,7 @@ test.describe("navigation redesign", () => {
     await header.getByRole("button", { name: "Open menu" }).click();
     const dialog = page.getByRole("dialog", { name: "Menu" });
     await expect(dialog).toBeVisible();
-    for (const name of ["Home", "Fonts", "Why Glyphy", "Favorites", "Recent"]) {
+    for (const name of ["Home", "Fonts", "Why Glyphtiq", "Favorites", "Recent"]) {
       await expect(dialog.getByRole("link", { name })).toBeVisible();
     }
   });

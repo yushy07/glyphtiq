@@ -31,7 +31,7 @@ export function useStyleActions({ appSlug, appName, inputText }: StyleActionsOpt
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const { recent, record } = useRecentStyles();
   const [comparison, setComparison] = useLocalStorage<string[]>(
-    "glyphy:comparison",
+    "glyphtiq:comparison",
     [],
     isStringArray,
   );
@@ -46,7 +46,7 @@ export function useStyleActions({ appSlug, appName, inputText }: StyleActionsOpt
 
   const copyStyle = useCallback(
     async (result: ConvertedResult) => {
-      const copyText = inputText.trim() ? result.text : result.style.convert("Glyphy");
+      const copyText = inputText.trim() ? result.text : result.style.convert("Glyphtiq");
       const ok = await copy(copyText);
       if (!ok) return push("Could not copy", "error");
       record(result.style.id);
@@ -65,7 +65,7 @@ export function useStyleActions({ appSlug, appName, inputText }: StyleActionsOpt
       if (typeof navigator !== "undefined" && navigator.share) {
         try {
           await navigator.share({
-            title: appName ? `${appName} font — ${result.style.name}` : `Glyphy — ${result.style.name}`,
+            title: appName ? `${appName} font — ${result.style.name}` : `Glyphtiq — ${result.style.name}`,
             text: result.text,
             url,
           });

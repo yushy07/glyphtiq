@@ -31,7 +31,7 @@ export async function rateLimit(
 ): Promise<RateLimitResult> {
   const client = getRedis();
   if (!client) return { success: true, remaining: limit };
-  const fullKey = `glyphy:rl:${key}`;
+  const fullKey = `glyphtiq:rl:${key}`;
   try {
     const current = await client.incr(fullKey);
     if (current === 1) {

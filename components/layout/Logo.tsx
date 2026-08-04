@@ -11,7 +11,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
         )}
       >
         <Image
-          src="/glyphy-mark.svg"
+          src="/glyphtiq-mark.svg"
           alt=""
           width={32}
           height={32}
@@ -20,7 +20,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
         />
       </span>
       <span className={cn("font-extrabold tracking-tight", compact ? "text-base" : "text-lg")}>
-        <span className="gradient-text">Glyphy</span>
+        <span className="gradient-text">Glyphtiq</span>
       </span>
     </span>
   );

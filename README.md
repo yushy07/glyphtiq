@@ -1,4 +1,4 @@
-# Glyphy — Fancy Text Generator
+# Glyphtiq — Fancy Text Generator
 
 Turn plain text into **260+ unicode styles** — bold, cursive, gothic, bubble, zalgo and more — with live previews, per-platform character limits, and a gaming name composer. Everything converts **right in your browser**, so your words never leave your device until you choose to share them.
 
@@ -11,7 +11,7 @@ Built with [Next.js 15](https://nextjs.org) (App Router), React 19, TypeScript a
 - **260+ unicode styles** across 16 categories — bold, italic, cursive, bubble, squared, gothic, fraktur, decorative, upside-down, reverse, morse, glitch, zalgo and more.
 - **20 platform pages** — Instagram, Facebook, X, TikTok, WhatsApp, Discord, Snapchat, Telegram, LinkedIn, YouTube, Twitch, Free Fire, PUBG, Roblox, Fortnite, Minecraft, Mobile Legends, COD Mobile, Valorant and a general gaming page.
 - **Live conversion** as you type, with emoji-safe handling and per-codepoint counting.
-- **Per-app character limits** — pick a use case (Bio, Display Name, Username, Clan Tag…) and Glyphy enforces the right limit live.
+- **Per-app character limits** — pick a use case (Bio, Display Name, Username, Clan Tag…) and Glyphtiq enforces the right limit live.
 - **Comparison tray** — pin up to 4 styles side-by-side and copy the winner (persisted locally).
 - **Symbol library** — hearts, stars, gaming glyphs, royal, brackets, arrows and kawaii symbols to insert or copy.
 - **Gaming name composer** — prefixes, clan tags and suffixes for styled gamer names (gaming pages only).

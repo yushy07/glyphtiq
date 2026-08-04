@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/layout/PageSection";
 import type { AppType } from "@/lib/text-engine/types";
 
 export const metadata: Metadata = {
-  title: "All Fonts Generators — Glyphy",
+  title: "All Fonts Generators — Glyphtiq",
   description:
     "Browse every dedicated font and name generator: Instagram, TikTok, X, Free Fire, PUBG, Roblox and more.",
 };

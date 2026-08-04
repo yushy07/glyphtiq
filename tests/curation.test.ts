@@ -175,7 +175,7 @@ describe("new styles", () => {
     for (const app of getApps()) {
       const curated = curatedForApp(app.key);
       for (const style of curated) {
-        const out = style.convert("Glyphy", { zalgoIntensity: 50 });
+        const out = style.convert("Glyphtiq", { zalgoIntensity: 50 });
         expect(typeof out).toBe("string");
         expect(out.length).toBeGreaterThan(0);
       }

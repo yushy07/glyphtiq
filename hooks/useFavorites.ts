@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import { isStringArray } from "@/lib/validation";
 
-const KEY = "glyphy:favorites";
+const KEY = "glyphtiq:favorites";
 
 export function useFavorites() {
   const [favorites, setFavorites] = useLocalStorage<string[]>(KEY, [], isStringArray);

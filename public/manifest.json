@@ -1,6 +1,6 @@
 {
-  "name": "Glyphy — Fancy Text Generator",
-  "short_name": "Glyphy",
+  "name": "Glyphtiq — Fancy Text Generator",
+  "short_name": "Glyphtiq",
   "description": "Turn plain text into 260+ unicode fancy styles — bold, cursive, gothic, zalgo, bubble and more. Fast, free and 100% in your browser.",
   "start_url": "/",
   "scope": "/",

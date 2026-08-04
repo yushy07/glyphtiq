@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Glyphy generator", () => {
+test.describe("Glyphtiq generator", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
   });

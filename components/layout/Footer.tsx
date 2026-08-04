@@ -4,7 +4,8 @@ import { Logo } from "./Logo";
 const PAGE_LINKS = [
   { href: "/", label: "Generator" },
   { href: "/fonts", label: "All fonts" },
-  { href: "/#why", label: "Why Glyphy" },
+  { href: "/symbols", label: "Symbols" },
+  { href: "/#why", label: "Why Glyphtiq" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -81,7 +82,7 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <span>Everything converts locally in your browser — nothing is sent to a server until you share a link.</span>
-          <span>Glyphy © {new Date().getFullYear()}</span>
+          <span>Glyphtiq © {new Date().getFullYear()}</span>
         </div>
       </div>
     </footer>

@@ -4,8 +4,8 @@ import path from "node:path";
 import sharp from "sharp";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ICON_SVG = path.join(ROOT, "glyphy_icon.svg");
-const MARK_SVG = path.join(ROOT, "public", "glyphy-mark.svg");
+const ICON_SVG = path.join(ROOT, "glyphtiq_icon.svg");
+const MARK_SVG = path.join(ROOT, "public", "glyphtiq-mark.svg");
 
 const APP_DIR = path.join(ROOT, "app");
 const PUBLIC_DIR = path.join(ROOT, "public");
@@ -53,7 +53,7 @@ async function buildOgImage(outFile) {
   <rect width="1200" height="630" fill="url(#glowCyan)"/>
   <rect x="506" y="84" width="188" height="188" rx="46" fill="#FFFFFF0D" stroke="#FFFFFF1F"/>
   <image href="${iconDataUri}" xlink:href="${iconDataUri}" width="130" height="130" x="535" y="113"/>
-  <text x="600" y="448" text-anchor="middle" font-family="Segoe UI, system-ui, -apple-system, Arial, sans-serif" font-size="104" font-weight="800" fill="#FAFAFC" letter-spacing="3">Glyphy</text>
+  <text x="600" y="448" text-anchor="middle" font-family="Segoe UI, system-ui, -apple-system, Arial, sans-serif" font-size="104" font-weight="800" fill="#FAFAFC" letter-spacing="3">Glyphtiq</text>
   <rect x="540" y="486" width="120" height="5" rx="2.5" fill="#8B5CF6"/>
   <text x="600" y="548" text-anchor="middle" font-family="Segoe UI, system-ui, -apple-system, Arial, sans-serif" font-size="33" font-weight="500" fill="#A1A1AA" letter-spacing="0.5">260+ fancy text styles, right in your browser</text>
 </svg>`;

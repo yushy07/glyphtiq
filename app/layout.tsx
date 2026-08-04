@@ -13,8 +13,8 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://glyphy-one.vercel.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Glyphy — Fancy Text Generator",
-    template: "%s · Glyphy",
+    default: "Glyphtiq — Fancy Text Generator",
+    template: "%s · Glyphtiq",
   },
   description: `Turn plain text into ${STYLE_COUNT_LABEL} unicode fancy styles — bold, cursive, gothic, zalgo, bubble and more. Fast, free and 100% in your browser.`,
   manifest: "/manifest.json",
@@ -27,15 +27,15 @@ export const metadata: Metadata = {
     "weird text",
   ],
   openGraph: {
-    title: "Glyphy — Fancy Text Generator",
+    title: "Glyphtiq — Fancy Text Generator",
     description: `${STYLE_COUNT_LABEL} unicode styles for your text. Bold, cursive, gothic, bubble and more — right in your browser.`,
     url: SITE_URL,
-    siteName: "Glyphy",
+    siteName: "Glyphtiq",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Glyphy — Fancy Text Generator",
+    title: "Glyphtiq — Fancy Text Generator",
     description: `${STYLE_COUNT_LABEL} unicode styles, converted locally.`,
   },
 };

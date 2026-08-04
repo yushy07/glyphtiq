@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const app = getAppBySlug(appSlug);
   if (!app) return { title: "Not found" };
   return {
-    title: `${app.title} — Glyphy`,
+    title: `${app.title} — Glyphtiq`,
     description: app.description,
   };
 }

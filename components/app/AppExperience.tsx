@@ -139,7 +139,7 @@ export function AppExperience({ app }: { app: AppConfig }) {
     (style: TextStyle) => {
       const result: ConvertedResult = {
         style,
-        text: style.convert(composedText.trim() ? composedText : "Glyphy", { zalgoIntensity: 50 }),
+        text: style.convert(composedText.trim() ? composedText : "Glyphtiq", { zalgoIntensity: 50 }),
       };
       void actions.copy(result);
       setSurpriseId(style.id);
@@ -150,7 +150,7 @@ export function AppExperience({ app }: { app: AppConfig }) {
   );
 
   const handleSurprise = useCallback(() => {
-    if (!text.trim()) setText("Glyphy");
+    if (!text.trim()) setText("Glyphtiq");
     if (bestResults.length === 0) return actions.push("No styles to surprise with", "info");
     const pick = bestResults[Math.floor(Math.random() * bestResults.length)];
     setSurpriseId(pick.style.id);

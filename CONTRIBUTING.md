@@ -1,6 +1,6 @@
-# Contributing to Glyphy
+# Contributing to Glyphtiq
 
-Thanks for wanting to contribute! Glyphy is a privacy-first fancy text generator, and every contribution helps.
+Thanks for wanting to contribute! Glyphtiq is a privacy-first fancy text generator, and every contribution helps.
 
 ## Ways to contribute
 

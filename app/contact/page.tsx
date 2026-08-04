@@ -7,7 +7,7 @@ import { ContactForm } from "@/components/contact/ContactForm";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Say hello — feedback, bugs, ideas or just a weird thing you made with Glyphy.",
+    "Say hello — feedback, bugs, ideas or just a weird thing you made with Glyphtiq.",
 };
 
 export default function ContactPage() {
@@ -19,7 +19,7 @@ export default function ContactPage() {
             Contact <span className="gradient-text">us</span>
           </>
         }
-        subtitle="Feedback, bugs, ideas, or just a weird thing you made with Glyphy."
+        subtitle="Feedback, bugs, ideas, or just a weird thing you made with Glyphtiq."
       />
 
       <div className="space-y-10">

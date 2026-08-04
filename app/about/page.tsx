@@ -5,7 +5,7 @@ import { STYLE_COUNT_LABEL } from "@/lib/text-engine/engine";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `Glyphy turns plain text into ${STYLE_COUNT_LABEL} unicode styles — right in your browser. Fast, free and private.`,
+  description: `Glyphtiq turns plain text into ${STYLE_COUNT_LABEL} unicode styles — right in your browser. Fast, free and private.`,
 };
 
 export default function AboutPage() {
@@ -14,16 +14,16 @@ export default function AboutPage() {
       <PageHeader
         title={
           <>
-            About <span className="gradient-text">Glyphy</span>
+            About <span className="gradient-text">Glyphtiq</span>
           </>
         }
         subtitle="A tiny tool for making plain words look anything but plain."
       />
 
       <div className="space-y-10">
-        <Section title="What Glyphy is">
+        <Section title="What Glyphtiq is">
           <p>
-            Glyphy is a free, browser-based fancy text generator. Type something
+            Glyphtiq is a free, browser-based fancy text generator. Type something
             plain and it instantly shows you {STYLE_COUNT_LABEL} unicode variations — bold,
             cursive, gothic, bubble, zalgo, upside-down and everything in
             between.
@@ -38,7 +38,7 @@ export default function AboutPage() {
           <p>
             Text is the most universal thing on the internet, yet almost
             everything you type looks the same. Unicode is full of beautiful
-            characters hiding in plain sight — Glyphy makes them one click
+            characters hiding in plain sight — Glyphtiq makes them one click
             away.
           </p>
           <p>
@@ -70,7 +70,7 @@ export default function AboutPage() {
 
         <Section title="How it works under the hood">
           <p>
-            Glyphy maps your characters through unicode lookalike sets — fullwidth
+            Glyphtiq maps your characters through unicode lookalike sets — fullwidth
             forms, mathematical letters, small caps, combining diacritics and
             more — then renders the result on a live canvas. Everything runs in
             your browser; the only server calls are for the optional share links

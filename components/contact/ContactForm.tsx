@@ -16,7 +16,7 @@ export function ContactForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const title = encodeURIComponent(`Contact from ${name || "the Glyphy site"}`);
+    const title = encodeURIComponent(`Contact from ${name || "the Glyphtiq site"}`);
     const body = encodeURIComponent(
       `${message}\n\n— ${name || "Anonymous"}${email ? `\n${email}` : ""}`,
     );

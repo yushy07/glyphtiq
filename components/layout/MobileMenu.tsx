@@ -14,6 +14,7 @@ import {
   LayoutGrid,
   Mic,
   Settings,
+  Shapes,
   Sparkles,
   Star,
   Timer,
@@ -40,7 +41,7 @@ const GROUPS: Array<{ type: AppType; label: string; icon: typeof Heart }> = [
 ];
 
 const SETTINGS_LINKS = [
-  { href: "/about", label: "About Glyphy" },
+  { href: "/about", label: "About Glyphtiq" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms & Conditions" },
@@ -158,9 +159,13 @@ export function MobileMenu({
                       <Type className="size-4" aria-hidden />
                       Fonts
                     </Link>
+                    <Link href="/symbols" onClick={close} className={row(isActive("/symbols"))}>
+                      <Shapes className="size-4" aria-hidden />
+                      Symbols
+                    </Link>
                     <Link href="/#why" onClick={close} className={row(false)}>
                       <Sparkles className="size-4" aria-hidden />
-                      Why Glyphy
+                      Why Glyphtiq
                     </Link>
                   </nav>
 

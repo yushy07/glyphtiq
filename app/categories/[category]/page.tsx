@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolved = resolveCategory(category);
   if (!resolved) return { title: "Not found" };
   return {
-    title: `${CATEGORY_LABELS[resolved]} Fonts — Glyphy`,
+    title: `${CATEGORY_LABELS[resolved]} Fonts — Glyphtiq`,
     description: `Browse ${CATEGORY_LABELS[resolved].toLowerCase()} font styles and convert your own text in one tap.`,
   };
 }
@@ -55,11 +55,11 @@ export default async function CategoryPage({ params }: Props) {
               </span>
             </div>
             <p className="break-words rounded-xl bg-surface-2 p-3 text-base leading-relaxed text-foreground">
-              {style.convert("Glyphy")}
+              {style.convert("Glyphtiq")}
             </p>
             <p className="text-sm text-muted">{style.description}</p>
             <Link
-              href={`/?text=Glyphy&category=${resolved}&style=${style.id}`}
+              href={`/?text=Glyphtiq&category=${resolved}&style=${style.id}`}
               className="group mt-auto inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border glass px-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Try in generator

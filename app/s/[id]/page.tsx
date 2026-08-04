@@ -18,9 +18,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : share.text;
   const preview = Array.from(styled).slice(0, 140).join("");
   return {
-    title: "Shared with Glyphy",
-    description: preview ? `${preview}…` : "A shared Glyphy text.",
-    openGraph: { title: "Shared with Glyphy", description: preview },
+    title: "Shared with Glyphtiq",
+    description: preview ? `${preview}…` : "A shared Glyphtiq text.",
+    openGraph: { title: "Shared with Glyphtiq", description: preview },
   };
 }
 
@@ -77,7 +77,7 @@ export default async function SharedPage({ params }: Props) {
               href={editUrl}
               className="inline-flex h-11 items-center gap-2 rounded-xl bg-foreground px-4 text-sm font-semibold text-background transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              {app ? `Make your own ${app.name} name` : "Edit in Glyphy"}
+              {app ? `Make your own ${app.name} name` : "Edit in Glyphtiq"}
               <ArrowRight className="size-4" aria-hidden />
             </Link>
           </div>

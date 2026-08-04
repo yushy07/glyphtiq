@@ -3,8 +3,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Menu, Search, Type, X } from "lucide-react";
+import { Heart, Home, Menu, Search, Shapes, Smile, Type, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { UniversalSearchBar } from "@/components/platform/UniversalSearchBar";
 import { AppsMenu } from "./AppsMenu";
 import { HeaderSearch } from "./HeaderSearch";
 import { Logo } from "./Logo";
@@ -57,7 +58,8 @@ export function Header() {
   }, [pathname]);
 
   const isHome = pathname === "/";
-  const navActive = (href: string) => pathname === href;
+  const navActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <>
@@ -72,7 +74,7 @@ export function Header() {
           <div className="flex items-center justify-between gap-3">
             <Link
               href="/"
-              aria-label="Glyphy home"
+              aria-label="Glyphtiq home"
               className="shrink-0 rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             >
               <Logo compact={scrolled} />
@@ -90,8 +92,24 @@ export function Header() {
                   <Type className="size-3.5" aria-hidden />
                   Fonts
                 </NavLink>
+                <NavLink href="/symbols" active={navActive("/symbols")}>
+                  <Shapes className="size-3.5" aria-hidden />
+                  Symbols
+                </NavLink>
+                <NavLink href="/kaomoji" active={navActive("/kaomoji")}>
+                  <Smile className="size-3.5" aria-hidden />
+                  Kaomoji
+                </NavLink>
+                <NavLink href="/username-generator" active={navActive("/username-generator")}>
+                  <User className="size-3.5" aria-hidden />
+                  Usernames
+                </NavLink>
+                <NavLink href="/favorites" active={navActive("/favorites")}>
+                  <Heart className="size-3.5" aria-hidden />
+                  Favorites
+                </NavLink>
               </nav>
-              <HeaderSearch />
+              <UniversalSearchBar />
               {isHome && (
                 <Link
                   href="/#generator"

@@ -38,7 +38,7 @@ export async function edgeRateLimit(
 ): Promise<{ success: boolean; remaining: number }> {
   if (!REST_URL || !REST_TOKEN) return { success: true, remaining: limit };
   try {
-    const fullKey = `glyphy:rl:${key}`;
+    const fullKey = `glyphtiq:rl:${key}`;
     const current = await redisCommand(["INCR", fullKey]);
     if (current === 1) {
       await redisCommand(["EXPIRE", fullKey, windowSeconds]).catch(() => {});

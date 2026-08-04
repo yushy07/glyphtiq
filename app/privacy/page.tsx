@@ -4,7 +4,7 @@ import { PageHeader, Section } from "@/components/layout/PageSection";
 export const metadata: Metadata = {
   title: "Privacy",
   description:
-    "How Glyphy handles your data — spoiler: almost everything stays in your browser.",
+    "How Glyphtiq handles your data — spoiler: almost everything stays in your browser.",
 };
 
 export default function PrivacyPage() {
@@ -18,7 +18,7 @@ export default function PrivacyPage() {
       <div className="space-y-10">
         <Section title="The short version">
           <p>
-            Glyphy is built to be private by default. Converting text, copying
+            Glyphtiq is built to be private by default. Converting text, copying
             results, favorites and your recent styles all happen inside your
             browser. No accounts, no tracking pixels, no profile built from what
             you type.
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
 
         <Section title="Anonymous usage statistics">
           <p>
-            Glyphy records lightweight, anonymous events — such as “a copy
+            Glyphtiq records lightweight, anonymous events — such as “a copy
             happened” and which style was copied — to surface popular styles.
             These events never include your typed text, and raw IP addresses are
             not stored.
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
                 Your data, <span className="gradient-text">your rules</span>
               </h3>
               <p className="max-w-md text-sm leading-relaxed text-muted">
-                Glyphy only learns what you choose to share. Everything else
+                Glyphtiq only learns what you choose to share. Everything else
                 stays exactly where it belongs — on your device.
               </p>
             </div>

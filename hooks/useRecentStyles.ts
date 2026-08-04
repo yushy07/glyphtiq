@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 
-const KEY = "glyphy:recent";
+const KEY = "glyphtiq:recent";
 
 export interface RecentEntry {
   styleId: string;

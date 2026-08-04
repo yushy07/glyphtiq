@@ -58,7 +58,7 @@ export const AppSections = memo(function AppSections({ sections, onPick, sampleT
             className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-4 pb-1 sm:mx-0 sm:px-0"
           >
             {section.styles.map((style) => {
-              const preview = sampleText ? style.convert(sampleText) : style.convert("Glyphy");
+              const preview = sampleText ? style.convert(sampleText) : style.convert("Glyphtiq");
               return (
                 <button
                   key={style.id}

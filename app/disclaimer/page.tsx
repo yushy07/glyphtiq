@@ -4,7 +4,7 @@ import { PageHeader, Section } from "@/components/layout/PageSection";
 export const metadata: Metadata = {
   title: "Disclaimer",
   description:
-    "The fine print for Glyphy — what the fancy text tool does and doesn't promise.",
+    "The fine print for Glyphtiq — what the fancy text tool does and doesn't promise.",
 };
 
 export default function DisclaimerPage() {
@@ -18,7 +18,7 @@ export default function DisclaimerPage() {
       <div className="space-y-10">
         <Section title="General information">
           <p>
-            Glyphy provides a free text conversion tool and related content “as
+            Glyphtiq provides a free text conversion tool and related content “as
             is” and “as available”, without warranties of any kind. The tool is
             intended for creative and personal use, not for professional or
             commercial reliance.
@@ -44,7 +44,7 @@ export default function DisclaimerPage() {
 
         <Section title="Not professional advice">
           <p>
-            Nothing on Glyphy constitutes technical, legal, financial or any
+            Nothing on Glyphtiq constitutes technical, legal, financial or any
             other professional advice. If the output matters to you, verify it
             before relying on it.
           </p>
@@ -60,7 +60,7 @@ export default function DisclaimerPage() {
 
         <Section title="Limitation of liability">
           <p>
-            To the maximum extent permitted by law, Glyphy and its maintainers
+            To the maximum extent permitted by law, Glyphtiq and its maintainers
             shall not be liable for any indirect, incidental or consequential
             damages arising from your use of, or inability to use, the service.
           </p>
