@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { MotionConfig } from "framer-motion";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -80,6 +81,7 @@ export default function RootLayout({
             </BackgroundEffects>
           </ToastProvider>
         </MotionConfig>
+        <Analytics />
       </body>
     </html>
   );
