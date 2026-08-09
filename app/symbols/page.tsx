@@ -5,7 +5,7 @@ import { constructMetadata, getBreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = constructMetadata({
   title: "Symbols — Copy & Paste Unicode Symbols Library — Glyphtiq",
-  description: `Browse and copy ${getSymbolCount().toLocaleString()} Unicode symbols — hearts, arrows, stars, aesthetic characters, math signs, and box art. Click to copy instantly.`,
+  description: `Browse and copy ${getSymbolCount().toLocaleString()} Unicode symbols including hearts, stars, arrows, aesthetic signs, and box art. Free, instant, and copy-paste ready.`,
   path: "/symbols",
   keywords: ["unicode symbols", "copy paste symbols", "heart symbols", "star symbols", "aesthetic text symbols"],
 });

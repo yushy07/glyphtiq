@@ -27,12 +27,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const category = getKaomojiCategory(item.category);
+  const isSynthetic = item.slug.startsWith("kaomoji-");
 
   return constructMetadata({
     title: `${item.expression} ${item.name} Kaomoji — Meaning & Copy — Glyphtiq`,
     description: `Copy ${item.expression} ${item.name} kaomoji emoticon. ${item.meaning ?? category.description} Includes meaning, usage examples, and related Japanese text faces.`,
     path: `/kaomoji/${item.slug}`,
     keywords: [item.name.toLowerCase(), item.expression, category.name.toLowerCase(), "kaomoji emoticon"],
+    noIndex: isSynthetic,
   });
 }
 

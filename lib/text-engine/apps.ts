@@ -1,4 +1,4 @@
-﻿import type { AppConfig, AppType, PlatformKey } from "./types";
+import type { AppConfig, AppType, PlatformKey } from "./types";
 
 /**
  * Single source of truth for every dedicated app/game generator page.
@@ -11,7 +11,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Instagram",
     title: "Instagram Fonts Generator",
     description:
-      "Create fancy Unicode text for Instagram bios, captions, stories, and display names.",
+      "Create fancy Unicode text for Instagram bios, captions, stories, and stylish display names. Copy-paste ready for your profile in one click.",
     accent: "#FF4D9D",
     type: "social",
     defaultCategory: "cursive",
@@ -31,7 +31,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Facebook",
     title: "Facebook Fonts Generator",
     description:
-      "Generate stylish text for Facebook profiles, posts, comments, and groups.",
+      "Generate stylish text for Facebook profiles, posts, comments, and community groups. Fast, private, and works right in your browser.",
     accent: "#22D3EE",
     type: "social",
     defaultCategory: "bold",
@@ -50,7 +50,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "X",
     title: "X Fonts Generator",
     description:
-      "Generate readable Unicode styles for X (formerly Twitter) display names, bios, and posts.",
+      "Generate readable Unicode styles for X and Twitter display names, bios, and posts. Create bold and aesthetic lettering with no login required.",
     accent: "#FAFAFC",
     type: "social",
     defaultCategory: "monospace",
@@ -70,7 +70,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "TikTok",
     title: "TikTok Fonts Generator",
     description:
-      "Make bold, cute and attention-grabbing Unicode text for TikTok bios and captions.",
+      "Make bold, cute, and attention-grabbing Unicode text for TikTok bios, captions, and comments. 100% free and copy-paste ready for your feed.",
     accent: "#22D3EE",
     type: "social",
     defaultCategory: "kawaii",
@@ -89,7 +89,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "WhatsApp",
     title: "WhatsApp Fonts Generator",
     description:
-      "Stylish Unicode text for WhatsApp statuses, names, and love messages.",
+      "Create stylish Unicode text for WhatsApp statuses, display names, and chat messages. Transform plain text into instant copy-paste ready styles.",
     accent: "#34D399",
     type: "social",
     defaultCategory: "decorated",
@@ -108,7 +108,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Discord",
     title: "Discord Fonts Generator",
     description:
-      "Gamer, glitch and decorative Unicode styles for Discord names and servers.",
+      "Generate gamer, glitch, and gothic Unicode styles for Discord usernames, bios, and servers. Fast, stylish, and works right in your browser.",
     accent: "#818CF8",
     type: "social",
     defaultCategory: "gothic",
@@ -127,14 +127,14 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Snapchat",
     title: "Snapchat Fonts Generator",
     description:
-      "Cute, bubbly and aesthetic Unicode styles for Snapchat names and captions.",
+      "Create cute, bubbly, and aesthetic Unicode styles for Snapchat display names, stories, and captions. Completely free with no login required.",
     accent: "#FDE047",
     type: "social",
     defaultCategory: "bubble",
     useCases: ["Display name", "Username", "Caption", "Story"],
     characterLimits: { username: 15, displayName: 32, caption: 250 },
     presets: [
-      "ðŸ‘» ð˜£ð˜¦ð˜µ ð˜ºð˜°ð˜¶ ð˜¤ð˜¢ð˜¯'ð˜µ ð˜¦ð˜·ð˜¦ð˜¯",
+      "ðŸ‘» ð ˜£ð ˜¦ð ˜µ ð ˜ºð ˜°ð ˜¶ ð ˜¤ð ˜¢ð ˜¯'ð ˜µ ð ˜¦ð ˜·ð ˜¦ð ˜¯",
       "♡ 𝘴𝘯𝘢𝘱 𝘢𝘤𝘤 𝘰𝘯𝘭𝘺 ♡",
       "✧ 𝘤𝘳𝘺𝘱𝘵𝘰𝘣𝘳𝘰 ✧",
     ],
@@ -146,7 +146,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Telegram",
     title: "Telegram Fonts Generator",
     description:
-      "Clean and bold Unicode styles for Telegram names, bios, and channels.",
+      "Generate clean, bold, and modern Unicode styles for Telegram channel names, bios, and chats. Instant conversion with copy-paste ready results.",
     accent: "#38BDF8",
     type: "social",
     defaultCategory: "bold",
@@ -165,7 +165,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "LinkedIn",
     title: "LinkedIn Fonts Generator",
     description:
-      "Professional and clean Unicode styles for LinkedIn profiles and posts.",
+      "Generate professional and clean Unicode styles for LinkedIn headlines, bios, and feed posts. Enhance your profile with no login required.",
     accent: "#0EA5E9",
     type: "social",
     defaultCategory: "monospace",
@@ -184,7 +184,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "YouTube",
     title: "YouTube Fonts Generator",
     description:
-      "Bold, glitchy and catchy Unicode styles for YouTube channel names and titles.",
+      "Create bold, glitchy, and catchy Unicode styles for YouTube channel names, video titles, and descriptions. Works right in your browser.",
     accent: "#F87171",
     type: "creator",
     defaultCategory: "bold",
@@ -203,7 +203,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Twitch",
     title: "Twitch Fonts Generator",
     description:
-      "Glitchy, gamer Unicode styles for Twitch display names, streams, and commands.",
+      "Generate glitchy gamer Unicode styles for Twitch display names, stream titles, and panel bios. 100% free and ready to copy in one click.",
     accent: "#C084FC",
     type: "creator",
     defaultCategory: "glitch",
@@ -222,7 +222,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Free Fire",
     title: "Free Fire Name Generator",
     description:
-      "Create stylish Free Fire nicknames, guild names, and clan tags.",
+      "Create stylish Free Fire nicknames, guild names, and decorated clan tags with custom symbols. Copy-paste ready for your gaming profile.",
     accent: "#BEF264",
     type: "gaming",
     defaultCategory: "all",
@@ -244,7 +244,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "PUBG",
     title: "PUBG Name Generator",
     description:
-      "Generate PUBG usernames, squad names, and decorated clan tags.",
+      "Generate PUBG usernames, squad names, and decorated clan tags with pro symbols. Fast, compatible, and works right in your browser.",
     accent: "#FBBF24",
     type: "gaming",
     defaultCategory: "all",
@@ -266,7 +266,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Roblox",
     title: "Roblox Name Generator",
     description:
-      "Cool Unicode names for Roblox avatars, groups, and roleplay characters.",
+      "Create cool Unicode names and aesthetic fonts for Roblox avatars, roleplay groups, and profiles. 100% free with no login required.",
     accent: "#60A5FA",
     type: "gaming",
     defaultCategory: "all",
@@ -287,7 +287,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Fortnite",
     title: "Fortnite Name Generator",
     description:
-      "Victory-royale Unicode names and clan tags for Fortnite players.",
+      "Generate victory-royale Unicode names, aesthetic fonts, and clan tags for Fortnite players. Instant conversion with copy-paste ready tags.",
     accent: "#A78BFA",
     type: "gaming",
     defaultCategory: "all",
@@ -308,7 +308,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Minecraft",
     title: "Minecraft Name Generator",
     description:
-      "Blocky-cool Unicode names for Minecraft players and servers.",
+      "Create blocky-cool Unicode names and stylish text for Minecraft players and servers. Fast, lightweight, and works right in your browser.",
     accent: "#4ADE80",
     type: "gaming",
     defaultCategory: "all",
@@ -329,7 +329,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Mobile Legends",
     title: "Mobile Legends Name Generator",
     description:
-      "Fierce Unicode names and clan tags for Mobile Legends: Bang Bang players.",
+      "Generate fierce Unicode names, squad tags, and pro symbols for Mobile Legends: Bang Bang players. Fast, 100% free, and copy-paste ready.",
     accent: "#F87171",
     type: "gaming",
     defaultCategory: "all",
@@ -350,7 +350,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "COD Mobile",
     title: "COD Mobile Name Generator",
     description:
-      "Squad-ready Unicode names and clan tags for Call of Duty: Mobile.",
+      "Create squad-ready Unicode names, clan tags, and stylish soldier handles for Call of Duty: Mobile. Fast, free, with no login required.",
     accent: "#FACC15",
     type: "gaming",
     defaultCategory: "all",
@@ -371,7 +371,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Valorant",
     title: "Valorant Name Generator",
     description:
-      "Tactical and radiant Unicode names and tags for Valorant players.",
+      "Generate tactical and radiant Unicode names, agent tags, and stylish IGNs for Valorant players. Works right in your browser instantly.",
     accent: "#F87171",
     type: "gaming",
     defaultCategory: "all",
@@ -392,7 +392,7 @@ export const APP_CONFIGS: AppConfig[] = [
     name: "Gaming",
     title: "Gaming Name Generator",
     description:
-      "One-stop Unicode name generator for every game — nicknames, clan tags, and squad names.",
+      "Generate custom Unicode nicknames, clan tags, and squad names for every major multiplayer game. 100% free, fast, and copy-paste ready.",
     accent: "#8B5CF6",
     type: "gaming",
     defaultCategory: "all",

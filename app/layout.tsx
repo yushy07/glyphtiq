@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     default: "Glyphtiq — Fancy Text Generator",
     template: "%s · Glyphtiq",
   },
-  description: `Turn plain text into ${STYLE_COUNT_LABEL} unicode fancy styles — bold, cursive, gothic, zalgo, bubble and more. Fast, free and 100% in your browser.`,
+  description: `Turn plain text into ${STYLE_COUNT_LABEL} unicode fancy styles including bold, cursive, gothic, zalgo, and bubble text. Fast, free, and works right in your browser.`,
   manifest: "/manifest.json",
   alternates: {
     canonical: "./",

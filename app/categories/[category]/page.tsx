@@ -5,6 +5,8 @@ import { ArrowRight } from "lucide-react";
 import { CATEGORIES, CATEGORY_LABELS } from "@/lib/text-engine/engine";
 import { STYLES } from "@/lib/text-engine/styles";
 import { PageHeader } from "@/components/layout/PageSection";
+import { PageContentGuide } from "@/components/seo/PageContentGuide";
+import { getCategoryContent } from "@/lib/seo/content";
 
 import { constructMetadata } from "@/lib/seo";
 
@@ -25,11 +27,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!resolved) return constructMetadata({ title: "Not Found — Glyphtiq", noIndex: true });
   return constructMetadata({
     title: `${CATEGORY_LABELS[resolved]} Fonts — Glyphtiq`,
-    description: `Browse ${CATEGORY_LABELS[resolved].toLowerCase()} font styles and convert your own text in one tap.`,
+    description: `Browse and copy ${CATEGORY_LABELS[resolved].toLowerCase()} font styles to convert plain text into fancy unicode letters. 100% free, instant, and works right in your browser.`,
     path: `/categories/${resolved}`,
     keywords: [`${CATEGORY_LABELS[resolved].toLowerCase()} fonts`, `${CATEGORY_LABELS[resolved].toLowerCase()} text`, "font generator"],
   });
 }
+
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { RelatedClusters } from "@/components/seo/RelatedClusters";
 
 export default async function CategoryPage({ params }: Props) {
   const { category } = await params;
@@ -38,9 +43,13 @@ export default async function CategoryPage({ params }: Props) {
 
   const label = CATEGORY_LABELS[resolved];
   const styles = STYLES.filter((s) => !s.hidden && s.category === resolved);
+  const content = getCategoryContent(resolved, label, styles.length);
+  const otherCategories = CATEGORIES.filter((c) => c !== resolved).slice(0, 8);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:py-12">
+      <Breadcrumbs items={[{ name: "Fonts", path: "/fonts" }, { name: `${label} Fonts`, path: `/categories/${resolved}` }]} />
+
       <PageHeader
         title={`${label} fonts`}
         subtitle={`${styles.length} ${label.toLowerCase()} styles that convert any text in your browser.`}
@@ -72,6 +81,42 @@ export default async function CategoryPage({ params }: Props) {
           </div>
         ))}
       </div>
+
+      <PageContentGuide
+        title={content.introTitle}
+        intro={content.introParagraph}
+        faqs={content.faqs}
+      />
+
+      {/* Sibling Category Explorer */}
+      <section className="mt-16 rounded-3xl border border-border/80 bg-card/40 p-8">
+        <h2 className="text-lg font-bold text-foreground">Explore Other Font Categories</h2>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {otherCategories.map((catKey) => {
+            const catLabel = CATEGORY_LABELS[catKey];
+            const catStyles = STYLES.filter((s) => !s.hidden && s.category === catKey);
+            return (
+              <Link
+                key={catKey}
+                href={`/categories/${catKey}`}
+                className="group flex flex-col justify-between rounded-2xl border border-border/60 bg-background/60 p-4 transition-all hover:border-primary/50 hover:bg-card"
+              >
+                <div>
+                  <span className="font-bold text-foreground group-hover:text-primary transition-colors text-sm">
+                    {catLabel} Fonts
+                  </span>
+                  <span className="mt-1 block text-xs text-muted">
+                    {catStyles.length} styles
+                  </span>
+                </div>
+                <span className="mt-2 text-xs font-semibold text-primary">Browse →</span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <RelatedClusters currentPath={`/categories/${resolved}`} />
     </div>
   );
 }

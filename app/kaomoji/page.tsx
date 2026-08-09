@@ -5,7 +5,7 @@ import { constructMetadata, getBreadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = constructMetadata({
   title: "Kaomoji & Emoticons — Copy Japanese Text Faces — Glyphtiq",
-  description: `Browse and copy ${getKaomojiCount().toLocaleString()} Japanese kaomojis & emoticons: happy, cute, shrug ¯\\_(ツ)_/¯, table flip, neko, and gaming chat reactions.`,
+  description: `Browse and copy ${getKaomojiCount().toLocaleString()} Japanese kaomojis, emoticons, and text faces for Discord, Twitter, and chat. Fast, instant, and no login required.`,
   path: "/kaomoji",
   keywords: ["kaomoji", "japanese emoticons", "shrug face", "text faces", "cute text emoticons"],
 });

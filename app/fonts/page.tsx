@@ -11,7 +11,7 @@ import { constructMetadata, getBreadcrumbJsonLd, SITE_URL } from "@/lib/seo";
 export const metadata: Metadata = constructMetadata({
   title: "All Font Generators — Glyphtiq",
   description:
-    "Browse 20+ dedicated font and name generators for Instagram, TikTok, X, Free Fire, PUBG, Discord, Roblox, and more.",
+    "Browse 20+ dedicated font and name generators for Instagram, TikTok, X, Free Fire, PUBG, Discord, and Roblox. Free and copy-paste ready.",
   path: "/fonts",
   keywords: ["all font generators", "fancy text fonts", "social media text generator", "gaming font changer"],
 });

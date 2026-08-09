@@ -6,7 +6,7 @@ import { constructMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = constructMetadata({
   title: "About — Glyphtiq",
-  description: `Glyphtiq turns plain text into ${STYLE_COUNT_LABEL} unicode styles — right in your browser. Fast, free and private.`,
+  description: `Glyphtiq turns plain text into ${STYLE_COUNT_LABEL} unicode styles and aesthetic symbol combinations right in your browser. Fast, free, and no login required.`,
   path: "/about",
 });
 

@@ -144,20 +144,41 @@ export const TOPIC_CLUSTERS: Record<string, ClusterLink[]> = {
   ],
 };
 
-export function getRelatedLinksForPath(currentPath: string, limit = 4): ClusterLink[] {
+export function getRelatedLinksForPath(currentPath: string, limit = 6): ClusterLink[] {
   const normalized = currentPath.toLowerCase();
 
-  if (normalized.includes("gaming") || normalized.includes("free-fire") || normalized.includes("valorant") || normalized.includes("pubg") || normalized.includes("roblox")) {
-    return [...TOPIC_CLUSTERS.gaming, ...TOPIC_CLUSTERS.unicode].filter((item) => item.href !== currentPath).slice(0, limit);
+  if (
+    normalized.includes("gaming") ||
+    normalized.includes("free-fire") ||
+    normalized.includes("valorant") ||
+    normalized.includes("pubg") ||
+    normalized.includes("roblox") ||
+    normalized.includes("discord")
+  ) {
+    return [...TOPIC_CLUSTERS.gaming, ...TOPIC_CLUSTERS.unicode]
+      .filter((item) => item.href !== currentPath)
+      .slice(0, limit);
   }
 
-  if (normalized.includes("instagram") || normalized.includes("tiktok") || normalized.includes("social") || normalized.includes("x-fonts")) {
-    return [...TOPIC_CLUSTERS.social, ...TOPIC_CLUSTERS.kaomoji].filter((item) => item.href !== currentPath).slice(0, limit);
+  if (
+    normalized.includes("instagram") ||
+    normalized.includes("tiktok") ||
+    normalized.includes("social") ||
+    normalized.includes("x-fonts") ||
+    normalized.includes("usernames")
+  ) {
+    return [...TOPIC_CLUSTERS.social, ...TOPIC_CLUSTERS.kaomoji]
+      .filter((item) => item.href !== currentPath)
+      .slice(0, limit);
   }
 
   if (normalized.includes("kaomoji")) {
-    return [...TOPIC_CLUSTERS.kaomoji, ...TOPIC_CLUSTERS.social].filter((item) => item.href !== currentPath).slice(0, limit);
+    return [...TOPIC_CLUSTERS.kaomoji, ...TOPIC_CLUSTERS.social]
+      .filter((item) => item.href !== currentPath)
+      .slice(0, limit);
   }
 
-  return [...TOPIC_CLUSTERS.unicode, ...TOPIC_CLUSTERS.gaming].filter((item) => item.href !== currentPath).slice(0, limit);
+  return [...TOPIC_CLUSTERS.unicode, ...TOPIC_CLUSTERS.social, ...TOPIC_CLUSTERS.gaming]
+    .filter((item) => item.href !== currentPath)
+    .slice(0, limit);
 }

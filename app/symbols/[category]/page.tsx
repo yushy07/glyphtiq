@@ -8,6 +8,8 @@ import {
 import { getSymbolsByCategory } from "@/lib/symbols/data";
 import { SYMBOL_COLLECTIONS } from "@/lib/symbols/collections";
 import { CategoryExplorerClient } from "./CategoryExplorerClient";
+import { PageContentGuide } from "@/components/seo/PageContentGuide";
+import { getSymbolCategoryContent } from "@/lib/seo/content";
 
 import { constructMetadata } from "@/lib/seo";
 
@@ -33,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return constructMetadata({
     title: `${category.name} Symbols (${symbolCount}) — Copy & Paste — Glyphtiq`,
-    description: `Browse and copy ${symbolCount} ${category.name} Unicode symbols. ${category.description} Click any symbol to copy instantly with JS escape, HTML entity, and code point.`,
+    description: `Browse and copy ${symbolCount} ${category.name} Unicode symbols. Click any symbol to copy with JS escape and code points. Copy-paste ready for any app.`,
     path: `/symbols/${category.slug}`,
     keywords: [category.name.toLowerCase(), `${category.name.toLowerCase()} symbols`, "unicode symbols", "copy paste symbols"],
   });
@@ -48,6 +50,7 @@ export default async function CategoryPage({ params }: Props) {
   }
 
   const categorySymbols = getSymbolsByCategory(category.key);
+  const content = getSymbolCategoryContent(category, categorySymbols.length);
   const otherCategories = SYMBOL_CATEGORY_LIST.filter(
     (c) => c.slug !== category.slug,
   ).slice(0, 8);
@@ -93,6 +96,13 @@ export default async function CategoryPage({ params }: Props) {
 
       {/* Interactive Symbol Grid */}
       <CategoryExplorerClient symbols={categorySymbols} />
+
+      {/* On-page Guide and FAQ Section */}
+      <PageContentGuide
+        title={content.introTitle}
+        intro={content.introParagraph}
+        faqs={content.faqs}
+      />
 
       {/* Other Categories */}
       <section className="mt-16 rounded-3xl border border-border/80 bg-card/40 p-8">

@@ -4,7 +4,7 @@ import { constructMetadata, getBreadcrumbJsonLd, getWebApplicationJsonLd } from 
 
 export const metadata: Metadata = constructMetadata({
   title: "Aesthetic Username Generator — Create Cool Handles — Glyphtiq",
-  description: "Generate memorable, stylish, and platform-compatible usernames for Instagram, TikTok, Discord, Free Fire, PUBG, Valorant, and Roblox with instant availability checks.",
+  description: "Generate memorable, stylish, and platform-compatible usernames for Instagram, TikTok, Discord, and gaming. Fast with no login required.",
   path: "/username-generator",
   keywords: ["username generator", "aesthetic usernames", "cool instagram handles", "discord username ideas"],
 });

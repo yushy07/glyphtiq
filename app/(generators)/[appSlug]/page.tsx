@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { RelatedClusters } from "@/components/seo/RelatedClusters";
+import { PageContentGuide } from "@/components/seo/PageContentGuide";
+import { getAppContent } from "@/lib/seo/content";
 
 export default async function AppGeneratorPage({ params }: Props) {
   const { appSlug } = await params;
@@ -31,6 +33,7 @@ export default async function AppGeneratorPage({ params }: Props) {
   if (!app) notFound();
 
   const appJsonLd = getWebApplicationJsonLd(app.title, app.description, `/${app.slug}`);
+  const content = getAppContent(app);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6">
@@ -40,6 +43,11 @@ export default async function AppGeneratorPage({ params }: Props) {
       />
       <Breadcrumbs items={[{ name: "Fonts", path: "/fonts" }, { name: app.name, path: `/${app.slug}` }]} />
       <AppExperience app={app} />
+      <PageContentGuide
+        title={content.introTitle}
+        intro={content.introParagraph}
+        faqs={content.faqs}
+      />
       <RelatedClusters currentPath={`/${app.slug}`} />
     </div>
   );
