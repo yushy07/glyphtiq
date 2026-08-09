@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import {
@@ -71,6 +71,16 @@ export function AppsDropdown({ open, onOpenChange }: AppsDropdownProps) {
   const pillFillRef = useRef<HTMLSpanElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (!nextOpen) {
+        setSearchQuery("");
+      }
+      onOpenChange(nextOpen);
+    },
+    [onOpenChange]
+  );
+
   useEffect(() => {
     if (!dropdownRef.current) return;
 
@@ -80,8 +90,6 @@ export function AppsDropdown({ open, onOpenChange }: AppsDropdownProps) {
         { opacity: 0, y: 8, scale: 0.97, filter: "blur(4px)" },
         { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "power2.out" }
       );
-    } else {
-      setSearchQuery("");
     }
   }, [open]);
 
@@ -95,13 +103,13 @@ export function AppsDropdown({ open, onOpenChange }: AppsDropdownProps) {
         triggerRef.current &&
         !triggerRef.current.contains(e.target as Node)
       ) {
-        onOpenChange(false);
+        handleOpenChange(false);
       }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onOpenChange(false);
+        handleOpenChange(false);
       }
     };
 
@@ -111,7 +119,7 @@ export function AppsDropdown({ open, onOpenChange }: AppsDropdownProps) {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [open, onOpenChange]);
+  }, [open, handleOpenChange]);
 
   const handleMouseEnterTrigger = () => {
     if (pillFillRef.current) {
@@ -136,7 +144,7 @@ export function AppsDropdown({ open, onOpenChange }: AppsDropdownProps) {
         aria-haspopup="menu"
         onClick={() => {
           if (!open) trackNavClick("dropdown_open", "apps");
-          onOpenChange(!open);
+          handleOpenChange(!open);
         }}
         onMouseEnter={handleMouseEnterTrigger}
         onMouseLeave={handleMouseLeaveTrigger}
@@ -225,7 +233,7 @@ export function AppsDropdown({ open, onOpenChange }: AppsDropdownProps) {
                             rel={item.external ? "noopener noreferrer" : undefined}
                             onClick={() => {
                               trackNavClick(item.label, item.href);
-                              onOpenChange(false);
+                              handleOpenChange(false);
                             }}
                             className="group flex min-h-[36px] items-center gap-2 rounded-xl border border-transparent px-2 py-1 transition-all duration-180 hover:border-border/60 hover:bg-surface-2/80 hover:shadow-xs focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
                           >

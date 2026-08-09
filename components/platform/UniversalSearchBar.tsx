@@ -1,24 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
 import { universalSearch } from "@/lib/platform/search";
-import type { UniversalSearchResult } from "@/lib/platform/types";
 
 export function UniversalSearchBar() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<UniversalSearchResult[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      return;
-    }
-    const matches = universalSearch(query, 24);
-    setResults(matches);
+  const results = useMemo(() => {
+    const trimmed = query.trim();
+    return trimmed ? universalSearch(trimmed, 24) : [];
   }, [query]);
 
   useEffect(() => {
