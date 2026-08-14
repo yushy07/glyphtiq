@@ -65,12 +65,50 @@ export default function RootLayout({
     <html lang="en" className={`dark ${inter.variable}`} suppressHydrationWarning>
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){
+              try {
+                var clean = function(el) {
+                  if (el && el.removeAttribute) {
+                    el.removeAttribute('bis_skin_checked');
+                    el.removeAttribute('bis_frame_id');
+                    el.removeAttribute('bis_register');
+                  }
+                };
+                var observer = new MutationObserver(function(mutations) {
+                  for (var i = 0; i < mutations.length; i++) {
+                    var m = mutations[i];
+                    if (m.type === 'attributes') {
+                      clean(m.target);
+                    } else if (m.type === 'childList') {
+                      for (var j = 0; j < m.addedNodes.length; j++) {
+                        clean(m.addedNodes[j]);
+                      }
+                    }
+                  }
+                });
+                observer.observe(document.documentElement, {
+                  attributes: true,
+                  subtree: true,
+                  childList: true,
+                  attributeFilter: ['bis_skin_checked', 'bis_frame_id', 'bis_register']
+                });
+                var origSet = Element.prototype.setAttribute;
+                Element.prototype.setAttribute = function(n, v) {
+                  if (n === 'bis_skin_checked' || n === 'bis_frame_id' || n === 'bis_register') return;
+                  return origSet.apply(this, arguments);
+                };
+              } catch(e) {}
+            })();`,
+          }}
+        />
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3890050404249156"
           crossOrigin="anonymous"
         />
       </head>
-      <body className="min-h-dvh antialiased font-sans">
+      <body className="min-h-dvh antialiased font-sans" suppressHydrationWarning>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"
@@ -93,7 +131,7 @@ export default function RootLayout({
         <MotionConfig reducedMotion="user">
           <ToastProvider>
             <BackgroundEffects>
-              <div className="flex min-h-dvh flex-col">
+              <div className="flex min-h-dvh flex-col" suppressHydrationWarning>
                 <Header />
                 <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
                   {children}
